@@ -13,7 +13,7 @@ from db import db
 class Building(db.Model):
     __tablename__ = "building"
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
     campus = db.Column(db.String(20), nullable=False)
     open_time = db.Column(db.Time, nullable=False)
