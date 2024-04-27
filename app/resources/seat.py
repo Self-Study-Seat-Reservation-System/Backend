@@ -34,3 +34,11 @@ class SeatResource(Resource):
         seat.save_to_db()
 
         return {"message": "Seat created successfully."}, 201
+
+    
+    def delete(self, seat_id):
+        seat = Seat.find_by_id(seat_id)
+        if not seat:
+            return {"message": "Seat id doesn't exist."}, 400
+        seat.deprecated = True
+        return {"message": "Seat deleted successfully."}, 200
