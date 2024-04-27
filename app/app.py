@@ -17,9 +17,14 @@ api = Api(app)
 
 api.add_resource(BuildingResource, "/api/building")
 api.add_resource(Hello, "/", "/api/hello")
-api.add_resource(RoomResource, "/api/room")
-api.add_resource(SeatResource, "/api/seat")
 api.add_resource(ReservationResource, "/api/reservation")
+
+# room
+api.add_resource(RoomResource, "/api/room", endpoint="room")
+api.add_resource(RoomResource, "/api/room/<int:room_id>", endpoint="room_by_id")
+
+api.add_resource(SeatResource, "/api/seat")
+
 
 if __name__ == "__main__":
     app.run(debug=True)

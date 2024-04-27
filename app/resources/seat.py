@@ -27,6 +27,8 @@ class SeatResource(Resource):
         room = Room.find_by_id(args["room_id"])
         if not room:
             return {"message": "Room id doesn't exist."}, 400
+        if room.deprecated == True:
+            return {"message": "Room id has been deprecated."}, 400
 
         seat = Seat(**args)
         seat.save_to_db()
