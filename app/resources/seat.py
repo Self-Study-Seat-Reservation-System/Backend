@@ -1,6 +1,6 @@
 from flask_restful import Resource, reqparse
 
-from models import Seat
+from models import Room, Seat
 
 from utils.logz import create_logger
 
@@ -23,6 +23,10 @@ class SeatResource(Resource):
         parser.add_argument("near_movable_socket", type=bool)
         parser.add_argument("near_window", type=bool)
         args = parser.parse_args()
+
+        room = Room.find_by_id(args["room_id"])
+        if not room:
+            return {"message": "Room id doesn't exist."}, 400
 
         seat = Seat(**args)
         seat.save_to_db()
