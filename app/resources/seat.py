@@ -16,6 +16,7 @@ class SeatResource(Resource):
             return {"message": "Seat not found."}, 404
         return {"seats": [seat.to_dict() for seat in Seat.find_all()]}
 
+    # create seat
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument("room_id", type=int, required=True)
@@ -35,7 +36,32 @@ class SeatResource(Resource):
 
         return {"message": "Seat created successfully."}, 201
 
-    
+
+    # update seat
+    def put(self, seat_id):
+        parser = reqparse.RequestParser()
+        parser.add_argument("near_fixed_socket", type=bool)
+        parser.add_argument("near_movable_socket", type=bool)
+        parser.add_argument("near_window", type=bool)
+        parser.add_argument("deprecated", type=bool)
+        args = parser.parse_args()
+
+        seat = Seat.find_by_id(seat_id)
+        if not seat:
+            return {"message": "Seat id doesn't exist."}, 400
+        
+        if args["near_fixed_socket"] is not None:
+            seat.near_fixed_socket = args["near_fixed_socket"]
+        if args["near_movable_socket"] is not None:
+            seat.near_movable_socket = args["near_movable_socket"]
+        if args["near_window"] is not None:
+            seat.near_window = args["near_window"]
+        if args["deprecated"] is not None:
+            seat.deprecated = args["deprecated"]
+
+        return {"message": "Seat updated successfully."}, 200
+
+        
     def delete(self, seat_id):
         seat = Seat.find_by_id(seat_id)
         if not seat:
