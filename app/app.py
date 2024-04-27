@@ -7,6 +7,7 @@ from resources.building import BuildingResource
 from resources.hello import Hello
 from resources.room import RoomResource
 from resources.seat import SeatResource
+from resources.reservation import ReservationResource
 
 app = Flask(__name__)
 app.config.from_object("config.Config")
@@ -18,6 +19,7 @@ api.add_resource(BuildingResource, "/api/building")
 api.add_resource(Hello, "/", "/api/hello")
 api.add_resource(RoomResource, "/api/room")
 api.add_resource(SeatResource, "/api/seat")
+api.add_resource(ReservationResource, "/api/reservation")
 
 if __name__ == "__main__":
     app.run(debug=True)
