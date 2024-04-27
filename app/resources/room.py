@@ -2,6 +2,7 @@ from datetime import time
 from flask_restful import Resource, reqparse
 from models import Room, Building
 from utils.logz import create_logger
+from utils.time import check_time_slot
 
 class RoomResource(Resource):
     def __init__(self):
@@ -23,14 +24,7 @@ class RoomResource(Resource):
         if building.deprecated:
             return {"message": "Buidling id has been deprecated."}, 400
 
-        try:
-            open_time = time.fromisoformat(args["open_time"])
-            close_time = time.fromisoformat(args["close_time"])
-        except ValueError:
-            return {"message": "Invalid time format. Please use 'HH:MM:SS'."}, 400
-
-        if open_time > close_time:
-            return {"message": "The open time is later than the close time."}, 400
+        check_time_slot(args["open_time"], args["close_time"])
 
         room = Room(**args)
         room.save_to_db()
