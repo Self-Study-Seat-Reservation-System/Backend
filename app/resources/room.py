@@ -22,7 +22,7 @@ class RoomResource(Resource):
         building = Building.find_by_id(args["building_id"])
         if not building:
             return {"message": "Building id doesn't exist."}, 400
-        if building.deprecated == True:
+        if building.deprecated is True:
             return {"message": "Buidling id has been deprecated."}, 400
 
         check_time_slot(args["open_time"], args["close_time"])
@@ -33,17 +33,36 @@ class RoomResource(Resource):
         return {"message": "Room created successfully."}, 201
 
 
-    # set room to available
+    # update room
     def put(self, room_id):
+        parser = reqparse.RequestParser()
+        parser.add_argument("open_time", type=str)
+        parser.add_argument("close_time", type=str)
+        parser.add_argument("deprecated", type=bool)
+        args = parser.parse_args()
+
         room = Room.find_by_id(room_id)
         if not room:
             return {"message": "Room id doesn't exist."}, 400
-        room.deprecated = False
+        
+        if args["deprecated"] is not None:
+            room.deprecated = args["deprecated"]
+            seats = Seat.find_by_room_id(room_id)
+            if seats:
+                for seat in seats:
+                    seat.deprecated = args["deprecated"]
 
-        seats = Seat.find_by_room_id(room_id)
-        if seats:
-            for seat in seats:
-                seat.deprecated = False
+        if args["open_time"] is not None:
+            my_open_time = args["open_time"]
+        else:
+            my_open_time = room.open_time.strftime('%H:%M:%S')
+        if args["close_time"] is not None:
+            my_close_time = args["close_time"]
+        else:
+            my_close_time = room.close_time.strftime('%H:%M:%S')       
+        check_time_slot(my_open_time, my_close_time)
+        room.open_time = my_open_time
+        room.close_time = my_close_time
         
         db.session.commit()
         return {"message": "Room updated successfully."}, 200
