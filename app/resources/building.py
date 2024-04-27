@@ -1,4 +1,3 @@
-from datetime import datetime, time
 from flask_restful import Resource, reqparse
 from models import Building
 from utils.logz import create_logger

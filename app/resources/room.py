@@ -1,6 +1,6 @@
-from datetime import time
+from db import db
 from flask_restful import Resource, reqparse
-from models import Room, Building
+from models import Building, Room, Seat
 from utils.logz import create_logger
 from utils.time import check_time_slot
 
@@ -21,7 +21,7 @@ class RoomResource(Resource):
         building = Building.find_by_id(args["building_id"])
         if not building:
             return {"message": "Building id doesn't exist."}, 400
-        if building.deprecated:
+        if building.deprecated == True:
             return {"message": "Buidling id has been deprecated."}, 400
 
         check_time_slot(args["open_time"], args["close_time"])
@@ -30,3 +30,17 @@ class RoomResource(Resource):
         room.save_to_db()
 
         return {"message": "Room created successfully."}, 201
+
+    def delete(self, room_id):
+        room = Room.find_by_id(room_id)
+        if not room:
+            return {"message": "Room id doesn't exist."}, 400
+        room.deprecated = True
+
+        seats = Seat.find_by_room_id(room_id)
+        if seats:
+            for seat in seats:
+                seat.deprecated = True
+        
+        db.session.commit()
+        return {"message": "Room deleted successfully."}, 200
