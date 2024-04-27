@@ -1,0 +1,27 @@
+from flask_restful import Resource, reqparse
+from models import Student
+from utils.logz import create_logger
+
+class StudentResource(Resource):
+    def __init__(self):
+        self.logger = create_logger("student")
+
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("student_id", type=str, required=True)
+        parser.add_argument("name", type=str, required=True)
+        parser.add_argument("password", type=str, required=True)
+        parser.add_argument("wechat_number", type=str)
+        parser.add_argument("school", type=str)
+        args = parser.parse_args()
+
+        existing_student = Student.find_by_student_id(args["student_id"])
+        if existing_student:
+            return {"message": "Student with this student ID already exists."}, 400
+
+        student = Student(**args)
+        student.save_to_db()
+
+        return {"message": "Student registered successfully."}, 201
+
+
