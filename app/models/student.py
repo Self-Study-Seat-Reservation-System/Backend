@@ -2,6 +2,7 @@ from db import db
 
 # CREATE TABLE Student (
 # 		id INT PRIMARY KEY,
+#       student_id VARCHAR(11) NOT NULL,
 # 		name VARCHAR(50) NOT NULL,
 # 		password VARCHAR(255) NOT NULL,
 # 		wechat_number VARCHAR(50),
@@ -14,6 +15,7 @@ class Student(db.Model):
     __tablename__ = "student"
 
     id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.String(11), unique=True, nullable=False)
     name = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
     wechat_number = db.Column(db.String(50))
@@ -23,6 +25,7 @@ class Student(db.Model):
     def to_dict(self):
         return {
             "id": self.id,
+            "student_id": self.student_id,
             "name": self.name,
             "wechat_id": self.wechat_number,
             "school": self.school,
@@ -36,6 +39,10 @@ class Student(db.Model):
     @classmethod
     def find_by_id(cls, id):
         return cls.query.filter_by(id=id).first()
+    
+    @classmethod
+    def find_by_student_id(cls, student_id):
+        return cls.query.filter_by(student_id=student_id).first()
 
     def save_to_db(self):
         db.session.add(self)

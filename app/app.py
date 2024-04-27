@@ -9,6 +9,7 @@ from resources.room import RoomResource
 from resources.seat import SeatResource
 from resources.reservation import ReservationResource
 from resources.adminconfig import ConfigResource
+from resources.student import StudentResource
 
 app = Flask(__name__)
 app.config.from_object("config.Config")
@@ -18,8 +19,14 @@ api = Api(app)
 
 api.add_resource(BuildingResource, "/api/building")
 api.add_resource(Hello, "/", "/api/hello")
+# reservation
 api.add_resource(ReservationResource, "/api/reservation")
-api.add_resource(ConfigResource, "/api/config")
+
+# adminconfig
+api.add_resource(ConfigResource, "/api/adminconfig")
+
+# student
+api.add_resource(StudentResource, "/api/student")
 
 # room
 api.add_resource(RoomResource, "/api/room", endpoint="room")
