@@ -1,4 +1,4 @@
-from flask_restful import Resource, reqparse
+from flask_restful import Resource, reqparse, request
 from models import Student
 from utils.logz import create_logger
 
@@ -24,4 +24,14 @@ class StudentResource(Resource):
 
         return {"message": "Student registered successfully."}, 201
 
+    def delete(self):
+        student_id = request.args.get('student_id')
+        if not student_id:
+            return {"message": "Student ID is required in the request."}, 400
 
+        student = Student.find_by_student_id(student_id)
+        if not student:
+            return {"message": "Student with this student ID doesn't exist."}, 400
+
+        student.delete_from_db()
+        return {"message": "Student deleted successfully."}, 200
