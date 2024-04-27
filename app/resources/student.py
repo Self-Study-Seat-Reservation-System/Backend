@@ -13,6 +13,7 @@ class StudentResource(Resource):
         parser.add_argument("password", type=str, required=True)
         parser.add_argument("wechat_number", type=str)
         parser.add_argument("school", type=str)
+        parser.add_argument("breach_count", type=int)
         args = parser.parse_args()
 
         existing_student = Student.find_by_student_id(args["student_id"])
