@@ -1,7 +1,6 @@
+from db import db
 from flask_restful import Resource, reqparse
-
 from models import Room, Seat
-
 from utils.logz import create_logger
 
 class SeatResource(Resource):
@@ -28,7 +27,7 @@ class SeatResource(Resource):
         room = Room.find_by_id(args["room_id"])
         if not room:
             return {"message": "Room id doesn't exist."}, 400
-        if room.deprecated == True:
+        if room.deprecated is True:
             return {"message": "Room id has been deprecated."}, 400
 
         seat = Seat(**args)
@@ -59,6 +58,7 @@ class SeatResource(Resource):
         if args["deprecated"] is not None:
             seat.deprecated = args["deprecated"]
 
+        db.session.commit()
         return {"message": "Seat updated successfully."}, 200
 
         
@@ -66,5 +66,8 @@ class SeatResource(Resource):
         seat = Seat.find_by_id(seat_id)
         if not seat:
             return {"message": "Seat id doesn't exist."}, 400
+
         seat.deprecated = True
+
+        db.session.commit()
         return {"message": "Seat deleted successfully."}, 200
