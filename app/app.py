@@ -23,8 +23,9 @@ api.add_resource(ReservationResource, "/api/reservation")
 api.add_resource(RoomResource, "/api/room", endpoint="room")
 api.add_resource(RoomResource, "/api/room/<int:room_id>", endpoint="room_by_id")
 
+# seat
 api.add_resource(SeatResource, "/api/seat")
-
+api.add_resource(SeatResource, "/api/seat/<int:seat_id>", endpoint="seat_by_id")
 
 if __name__ == "__main__":
     app.run(debug=True)
