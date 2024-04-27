@@ -8,6 +8,7 @@ class RoomResource(Resource):
     def __init__(self):
         self.logger = create_logger("room")
 
+    # create room
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument("building_id", type=int, required=True)
@@ -31,6 +32,24 @@ class RoomResource(Resource):
 
         return {"message": "Room created successfully."}, 201
 
+
+    # set room to available
+    def put(self, room_id):
+        room = Room.find_by_id(room_id)
+        if not room:
+            return {"message": "Room id doesn't exist."}, 400
+        room.deprecated = False
+
+        seats = Seat.find_by_room_id(room_id)
+        if seats:
+            for seat in seats:
+                seat.deprecated = False
+        
+        db.session.commit()
+        return {"message": "Room updated successfully."}, 200
+
+
+    # set room to deprecated
     def delete(self, room_id):
         room = Room.find_by_id(room_id)
         if not room:
