@@ -8,6 +8,14 @@ class RoomResource(Resource):
     def __init__(self):
         self.logger = create_logger("room")
 
+    def get(self, room_id=None):
+        if room_id:
+            room = Room.find_by_id(room_id)
+            if room:
+                return room.to_dict(), 200
+            return {"message": "Room not found."}, 404
+        return {"room": [room.to_dict() for room in Room.find_all()]}, 200
+
     # create room
     def post(self):
         parser = reqparse.RequestParser()

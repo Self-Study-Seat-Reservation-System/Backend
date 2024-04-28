@@ -11,9 +11,9 @@ class SeatResource(Resource):
         if seat_id:
             seat = Seat.find_by_id(seat_id)
             if seat:
-                return seat.to_dict()
+                return seat.to_dict(), 200
             return {"message": "Seat not found."}, 404
-        return {"seats": [seat.to_dict() for seat in Seat.find_all()]}
+        return {"seats": [seat.to_dict() for seat in Seat.find_all()]}, 200
 
     # create seat
     def post(self):
