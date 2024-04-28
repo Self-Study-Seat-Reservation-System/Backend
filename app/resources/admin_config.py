@@ -3,9 +3,9 @@ from flask_restful import Resource, reqparse
 from models import AdminConfig
 from utils.logz import create_logger
 
-class ConfigResource(Resource):
+class AdminConfigResource(Resource):
     def __init__(self):
-        self.logger = create_logger("config")
+        self.logger = create_logger("adminconfig")
 
     def get(self):
         # 获取当前的最大预约时长

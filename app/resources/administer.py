@@ -2,9 +2,9 @@ from flask_restful import Resource, reqparse, request
 from models import Student
 from utils.logz import create_logger
 
-class AdminResource(Resource):
+class AdministerResource(Resource):
     def __init__(self):
-        self.logger = create_logger("admin")
+        self.logger = create_logger("administer")
 
     def get(self):
         breach_count = request.args.get('breach_count')
