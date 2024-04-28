@@ -3,14 +3,15 @@ from flask_restful import Api
 
 from initializers import mysql
 
+from resources.admin import AdminResource
+from resources.adminconfig import ConfigResource
 from resources.building import BuildingResource
 from resources.hello import Hello
+from resources.reservation import ReservationResource
 from resources.room import RoomResource
 from resources.seat import SeatResource
-from resources.reservation import ReservationResource
-from resources.adminconfig import ConfigResource
 from resources.student import StudentResource
-from resources.admin import AdminResource
+
 
 app = Flask(__name__)
 app.config.from_object("config.Config")
@@ -18,27 +19,32 @@ app.config.from_object("config.Config")
 db = mysql.init_db(app)
 api = Api(app)
 
-api.add_resource(BuildingResource, "/api/building")
-api.add_resource(Hello, "/", "/api/hello")
-# reservation
-api.add_resource(ReservationResource, "/api/reservation")
+# admin
+api.add_resource(AdminResource, "/api/admin")
 
 # adminconfig
 api.add_resource(ConfigResource, "/api/adminconfig")
 
-# student
-api.add_resource(StudentResource, "/api/student")
+# building
+api.add_resource(BuildingResource, "/api/building")
 
-# admin
-api.add_resource(AdminResource, "/api/admin")
+# hello
+api.add_resource(Hello, "/", "/api/hello")
+
+# reservation
+api.add_resource(ReservationResource, "/api/reservation")
 
 # room
 api.add_resource(RoomResource, "/api/room", endpoint="room")
 api.add_resource(RoomResource, "/api/room/<int:room_id>", endpoint="room_by_id")
 
 # seat
-api.add_resource(SeatResource, "/api/seat")
+api.add_resource(SeatResource, "/api/seat", endpoint="seat")
 api.add_resource(SeatResource, "/api/seat/<int:seat_id>", endpoint="seat_by_id")
+
+# student
+api.add_resource(StudentResource, "/api/student")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
