@@ -26,7 +26,8 @@ api.add_resource(AdminResource, "/api/admin")
 api.add_resource(ConfigResource, "/api/adminconfig")
 
 # building
-api.add_resource(BuildingResource, "/api/building")
+api.add_resource(BuildingResource, "/api/building", endpoint="building")
+api.add_resource(BuildingResource, "/api/building/<int:building_id>", endpoint="building_by_id")
 
 # hello
 api.add_resource(Hello, "/", "/api/hello")

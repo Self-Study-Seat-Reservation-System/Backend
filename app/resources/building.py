@@ -6,6 +6,16 @@ from utils.time import check_time_slot
 class BuildingResource(Resource):
     def __init__(self):
         self.logger = create_logger("building")
+    
+    
+    def get(self, building_id=None):
+        if building_id:
+            building = Building.find_by_id(building_id)
+            if building:
+                return building.to_dict(), 200
+            return {"message": "Building not found."}, 404
+        return {"buildings": [building.to_dict() for building in Building.find_all()]}, 200
+
 
     def post(self):
         parser = reqparse.RequestParser()
