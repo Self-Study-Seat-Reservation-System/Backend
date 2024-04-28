@@ -4,4 +4,4 @@ from models.reservation import Reservation
 from models.room import Room
 from models.seat import Seat
 from models.student import Student
-from models.adminconfig import AdminConfig
+from models.admin_config import AdminConfig

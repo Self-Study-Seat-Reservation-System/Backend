@@ -8,7 +8,7 @@ from db import db
 
 
 class AdminConfig(db.Model):
-    __tablename__ = "config"
+    __tablename__ = "adminconfig"
 
     id = db.Column(db.Integer, primary_key=True)
     config_key = db.Column(db.String(100), unique=True, nullable=False)

@@ -56,7 +56,7 @@ CREATE TABLE Reservation (
 	status INT DEFAULT 0 NOT NULL
 );
 
-CREATE TABLE Config (
+CREATE TABLE AdminConfig (
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	config_key VARCHAR(100) NOT NULL,
 	config_value VARCHAR(255) NOT NULL
