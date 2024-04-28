@@ -11,9 +11,9 @@ class SeatResource(Resource):
         if seat_id:
             seat = Seat.find_by_id(seat_id)
             if seat:
-                return seat.to_dict()
+                return seat.to_dict(), 200
             return {"message": "Seat not found."}, 404
-        return {"seats": [seat.to_dict() for seat in Seat.find_all()]}
+        return {"seats": [seat.to_dict() for seat in Seat.find_all()]}, 200
 
     # create seat
     def post(self):
@@ -26,7 +26,7 @@ class SeatResource(Resource):
 
         room = Room.find_by_id(args["room_id"])
         if not room:
-            return {"message": "Room id doesn't exist."}, 400
+            return {"message": "Room not found."}, 404
         if room.deprecated is True:
             return {"message": "Room id has been deprecated."}, 400
 
@@ -47,7 +47,7 @@ class SeatResource(Resource):
 
         seat = Seat.find_by_id(seat_id)
         if not seat:
-            return {"message": "Seat id doesn't exist."}, 400
+            return {"message": "Seat not found."}, 404
         
         if args["near_fixed_socket"] is not None:
             seat.near_fixed_socket = args["near_fixed_socket"]
@@ -65,7 +65,7 @@ class SeatResource(Resource):
     def delete(self, seat_id):
         seat = Seat.find_by_id(seat_id)
         if not seat:
-            return {"message": "Seat id doesn't exist."}, 400
+            return {"message": "Seat not found."}, 404
 
         seat.deprecated = True
 

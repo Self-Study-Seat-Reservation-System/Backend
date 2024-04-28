@@ -8,6 +8,14 @@ class RoomResource(Resource):
     def __init__(self):
         self.logger = create_logger("room")
 
+    def get(self, room_id=None):
+        if room_id:
+            room = Room.find_by_id(room_id)
+            if room:
+                return room.to_dict(), 200
+            return {"message": "Room not found."}, 404
+        return {"room": [room.to_dict() for room in Room.find_all()]}, 200
+
     # create room
     def post(self):
         parser = reqparse.RequestParser()
@@ -21,7 +29,7 @@ class RoomResource(Resource):
 
         building = Building.find_by_id(args["building_id"])
         if not building:
-            return {"message": "Building id doesn't exist."}, 400
+            return {"message": "Building not found."}, 404
         if building.deprecated is True:
             return {"message": "Buidling id has been deprecated."}, 400
 
@@ -43,7 +51,7 @@ class RoomResource(Resource):
 
         room = Room.find_by_id(room_id)
         if not room:
-            return {"message": "Room id doesn't exist."}, 400
+            return {"message": "Room not found."}, 404
         
         if args["deprecated"] is not None:
             room.deprecated = args["deprecated"]
@@ -72,7 +80,7 @@ class RoomResource(Resource):
     def delete(self, room_id):
         room = Room.find_by_id(room_id)
         if not room:
-            return {"message": "Room id doesn't exist."}, 400
+            return {"message": "Room not found."}, 404
         room.deprecated = True
 
         seats = Seat.find_by_room_id(room_id)
