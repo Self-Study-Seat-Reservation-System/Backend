@@ -43,3 +43,16 @@ Ran 1 test in 0.110s
 
 OK
 ```
+
+### 测试CI
+workflow backend_test.yml steps中添加
+```
+- name: 🔫 Run test_hello
+run: |
+    cd app && \
+    MYSQL_RESTORE_SOURCE=$RESTORE \
+    MYSQL_USER=$MYSQL_USER \
+    MYSQL_PASSWORD=$MYSQL_PASSWORD \
+    MYSQL_DATABASE=$MYSQL_DATABASE \
+    python -m unittest tests/test_hello.py \
+```
