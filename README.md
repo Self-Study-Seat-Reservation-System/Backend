@@ -30,3 +30,16 @@ python app.py
     "seats": []
 }
 ```
+
+## 测试
+在app目录下运行
+```
+python -m unittest tests/test_hello.py
+
+
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.110s
+
+OK
+```
