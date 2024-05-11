@@ -2,8 +2,12 @@ from datetime import datetime
 from flask import request
 from flask_restful import Resource, reqparse
 from models import Room
+from utils.logz import create_logger
 
 class RoomSearchResource(Resource):
+    def __init__(self):
+        self.logger = create_logger("room_search")
+        
     def get(self):
         campus = request.args.get("campus", type=str)
         building = request.args.get("building", type=str)
