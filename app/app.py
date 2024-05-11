@@ -11,6 +11,8 @@ from resources.reservation import ReservationResource
 from resources.room import RoomResource
 from resources.seat import SeatResource
 from resources.student import StudentResource
+from resources.room_search import RoomSearchResource
+from resources.seat_search import SeatSearchResource
 
 
 app = Flask(__name__)
@@ -40,10 +42,12 @@ api.add_resource(ReservationResource, "/api/reservation")
 api.add_resource(RoomResource, "/api/room", endpoint="room")
 api.add_resource(RoomResource, "/api/room/<int:room_id>", endpoint="room_by_id")
 
+api.add_resource(RoomSearchResource, "/api/room/search")
 # seat
 api.add_resource(SeatResource, "/api/seat", endpoint="seat")
 api.add_resource(SeatResource, "/api/seat/<int:seat_id>", endpoint="seat_by_id")
 
+api.add_resource(SeatSearchResource, "/api/seat/search")
 # student
 api.add_resource(StudentResource, "/api/student")
 
