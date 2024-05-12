@@ -12,17 +12,13 @@ class ReservationResource(Resource):
         self.logger = create_logger("reservation")
 
     def get(self):
-        room_id = request.args.get("room_id", type=int)
-        seat_id = request.args.get("seat_id", type=int)
-        if seat_id is None:
-            reservations = Reservation.find_by_room_id(room_id)
-        else:
-            reservations_by_room = Reservation.find_by_room_id(room_id)
-            reservations_by_seat = Reservation.find_by_seat_id(seat_id)
-            reservations = list(set(reservations_by_room) & set(reservations_by_seat))
+        user_id = request.args.get("user_id", default=None, type=int)
+        room_id = request.args.get("room_id", default=None, type=int)
+        seat_id = request.args.get("seat_id", default=None, type=int)
+        reservations = Reservation.find(user_id=user_id, room_id=room_id, seat_id=seat_id)
 
         if not reservations:
-            return {"message": "No reservations found for the specified room and seat combination."}, 404
+            return {"message": "Reservations not found."}, 404
 
         reservation_list = [reservation.to_dict() for reservation in reservations]
 
