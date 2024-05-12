@@ -2,7 +2,8 @@ from db import db
 from flask_restful import Resource, reqparse
 from models import Building, Room, Seat
 from utils.logz import create_logger
-from utils.time import check_time_slot
+from utils.time import TimeService
+from utils.resource_checker import ResourceChecker
 
 class RoomResource(Resource):
     def __init__(self):
@@ -16,6 +17,7 @@ class RoomResource(Resource):
             return {"message": "Room not found."}, 404
         return {"room": [room.to_dict() for room in Room.find_all()]}, 200
 
+
     # create room
     def post(self):
         parser = reqparse.RequestParser()
@@ -27,13 +29,13 @@ class RoomResource(Resource):
 
         args = parser.parse_args()
 
-        building = Building.find_by_id(args["building_id"])
-        if not building:
-            return {"message": "Building not found."}, 404
-        if building.deprecated is True:
-            return {"message": "Buidling id has been deprecated."}, 400
+        result, status_code = ResourceChecker.check_building_available(args["building_id"])
+        if status_code != 200:
+            return result, status_code
 
-        check_time_slot(args["open_time"], args["close_time"])
+        result, status_code = TimeService.check_time_slot(args["open_time"], args["close_time"])
+        if status_code != 200:
+            return result, status_code
 
         room = Room(**args)
         room.save_to_db()
@@ -68,7 +70,7 @@ class RoomResource(Resource):
             my_close_time = args["close_time"]
         else:
             my_close_time = room.close_time.strftime('%H:%M:%S')       
-        check_time_slot(my_open_time, my_close_time)
+        TimeService.check_time_slot(my_open_time, my_close_time)
         room.open_time = my_open_time
         room.close_time = my_close_time
         

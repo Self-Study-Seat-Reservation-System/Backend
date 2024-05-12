@@ -43,11 +43,13 @@ api.add_resource(RoomResource, "/api/room", endpoint="room")
 api.add_resource(RoomResource, "/api/room/<int:room_id>", endpoint="room_by_id")
 
 api.add_resource(RoomSearchResource, "/api/room/search")
+
 # seat
 api.add_resource(SeatResource, "/api/seat", endpoint="seat")
 api.add_resource(SeatResource, "/api/seat/<int:seat_id>", endpoint="seat_by_id")
 
 api.add_resource(SeatSearchResource, "/api/seat/search")
+
 # student
 api.add_resource(StudentResource, "/api/student")
 
