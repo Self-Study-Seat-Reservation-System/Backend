@@ -60,6 +60,16 @@ class Reservation(db.Model):
     @classmethod
     def find_by_seat_id(cls, seat_id):
         return cls.query.filter_by(seat_id=seat_id).all()
+    
+    @classmethod
+    def find(cls, **args):
+        query = cls.query
+        for key, value in args.items():
+            if value is None:
+                continue
+            query = query.filter(getattr(cls, key) == value)
+        query = query.order_by(cls.start_time)
+        return query.all()
 
     def save_to_db(self):
         db.session.add(self)
