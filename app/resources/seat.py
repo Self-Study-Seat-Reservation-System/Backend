@@ -24,11 +24,9 @@ class SeatResource(Resource):
         parser.add_argument("near_window", type=bool)
         args = parser.parse_args()
 
-        room = Room.find_by_id(args["room_id"])
-        if not room:
-            return {"message": "Room not found."}, 404
-        if room.deprecated is True:
-            return {"message": "Room id has been deprecated."}, 400
+        result, status_code = ResourceChecker.check_room_available(args["room_id"])
+        if status_code != 200:
+            return result, status_code
 
         seat = Seat(**args)
         seat.save_to_db()

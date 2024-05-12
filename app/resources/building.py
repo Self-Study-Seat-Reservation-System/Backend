@@ -1,7 +1,7 @@
 from flask_restful import Resource, reqparse
 from models import Building
 from utils.logz import create_logger
-from utils.time import check_time_slot
+from utils.time import TimeService
 
 class BuildingResource(Resource):
     def __init__(self):
@@ -30,7 +30,9 @@ class BuildingResource(Resource):
         if old_building:
             return {"message": "The Building name already exists."}, 400
 
-        check_time_slot(args["open_time"], args["close_time"])
+        result, status_code = TimeService.check_time_slot(args["open_time"], args["close_time"])
+        if status_code != 200:
+            return result, status_code
 
         building = Building(**args)
         building.save_to_db()
