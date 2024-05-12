@@ -70,7 +70,9 @@ class RoomResource(Resource):
             my_close_time = args["close_time"]
         else:
             my_close_time = room.close_time.strftime('%H:%M:%S')       
-        TimeService.check_time_slot(my_open_time, my_close_time)
+        result, status_code = TimeService.check_time_slot(my_open_time, my_close_time)
+        if status_code != 200:
+            return result, status_code
         room.open_time = my_open_time
         room.close_time = my_close_time
         

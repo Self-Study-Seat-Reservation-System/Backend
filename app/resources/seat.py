@@ -2,6 +2,7 @@ from db import db
 from flask_restful import Resource, reqparse
 from models import Room, Seat
 from utils.logz import create_logger
+from utils.resource_checker import ResourceChecker
 
 class SeatResource(Resource):
     def __init__(self):
