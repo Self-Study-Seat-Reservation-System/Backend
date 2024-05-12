@@ -10,27 +10,25 @@ class RoomSearchResource(Resource):
         
     def get(self):
         campus = request.args.get("campus", type=str)
-        building = request.args.get("building", type=str)
-        department = request.args.get("department", type=str)
+        building_id = request.args.get("building", type=str)
+        school = request.args.get("school", type=str)
         available = request.args.get("available", type=bool)
 
-        query = Room.query
+        rooms = Room.find_all()
 
         if campus:
-            query = query.filter(Room.campus == campus)
+            rooms = [room for room in rooms if room.campus == campus]
         
-        if building:
-            query = query.filter(Room.building == building)
+        if building_id:
+            rooms = [room for room in rooms if room.building_id == building_id]
         
-        if department:
-            query = query.filter(Room.department == department)
+        if school:
+            rooms = [room for room in rooms if room.school == school]
 
         if available is not None:
             current_time = datetime.now().time()
-            query = query.filter(Room.deprecated == False)
-            query = query.filter(Room.open_time <= current_time, Room.close_time >= current_time)
-
-        rooms = query.all()
+            rooms = [room for room in rooms if not room.deprecated and room.open_time <= current_time <= room.close_time]
+            
         if not rooms:
             return {"message": "No rooms found."}, 404
         
