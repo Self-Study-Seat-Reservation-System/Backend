@@ -9,7 +9,7 @@ class AdminConfigResource(Resource):
 
     def get(self):
         # 获取当前的最大预约时长
-        max_reservation_duration_config = AdminConfig.query.filter_by(config_key='max_reservation_duration').first()
+        max_reservation_duration_config = AdminConfig.find_by_key('max_reservation_duration')
         if max_reservation_duration_config:
             max_reservation_duration = max_reservation_duration_config.config_value
         else:
@@ -29,7 +29,7 @@ class AdminConfigResource(Resource):
             return {"message": "Max reservation duration must be a positive integer."}, 400
 
         # 更新或创建最大预约时长配置
-        max_reservation_duration_config = AdminConfig.query.filter_by(config_key='max_reservation_duration').first()
+        max_reservation_duration_config = AdminConfig.find_by_key('max_reservation_duration')
         if max_reservation_duration_config:
             max_reservation_duration_config.config_value = max_reservation_duration
         else:

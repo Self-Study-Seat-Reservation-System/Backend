@@ -14,9 +14,11 @@ class ReservationResource(Resource):
         room_id = request.args.get("room_id", type=int)
         seat_id = request.args.get("seat_id", type=int)
         if seat_id is None:
-            reservations = Reservation.query.filter_by(room_id=room_id).all()
+            reservations = Reservation.find_by_room_id(room_id)
         else:
-            reservations = Reservation.query.filter_by(room_id=room_id, seat_id=seat_id).all()
+            reservations_by_room = Reservation.find_by_room_id(room_id)
+            reservations_by_seat = Reservation.find_by_seat_id(seat_id)
+            reservations = list(set(reservations_by_room) & set(reservations_by_seat))
 
         if not reservations:
             return {"message": "No reservations found for the specified room and seat combination."}, 404

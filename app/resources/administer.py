@@ -8,7 +8,7 @@ class AdministerResource(Resource):
 
     def get(self):
         breach_count = request.args.get('breach_count')
-        students_with_breach = Student.query.filter(Student.breach_count > breach_count).all()
+        students_with_breach = Student.find_by_breach_count(Student.breach_count > breach_count).all()
         if not students_with_breach:
             return {"message": f"No students with breach records greater than {breach_count} found."}, 404
 
