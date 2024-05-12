@@ -1,7 +1,7 @@
 from datetime import datetime, time
 from flask import request
 from flask_restful import Resource, reqparse
-from models import AdminConfig, Reservation, Room, Student
+from models import AdminConfig, Reservation, Room, Seat, Student
 from utils.logz import create_logger
 from utils.time import TimeService
 from utils.resource_checker import ResourceChecker
@@ -48,6 +48,10 @@ class ReservationResource(Resource):
         result, status_code = ResourceChecker.check_seat_available(args["seat_id"])
         if status_code != 200:
             return result, status_code
+        
+        seat = Seat.find_by_id(args["seat_id"])
+        if seat.room_id != args["room_id"]:
+            return {"message": "The seat is not in the given room."}, 400
 
         result, status_code = ResourceChecker.check_school_match(args["user_id"], args["room_id"])
         if status_code != 200:
