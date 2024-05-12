@@ -14,21 +14,20 @@ class SeatSearchResource(Resource):
         near_fixed_socket = request.args.get("near_fixed_socket", type=bool)
         near_movable_socket = request.args.get("near_movable_socket", type=bool)
 
-        query = Seat.query
+        seats = Seat.find_all()
 
         if available is not None:
-            query = query.filter(Seat.deprecated == False)
+            seats = [seat for seat in seats if not seat.deprecated]
         
         if near_window:
-            query = query.filter(Seat.near_window == True)
+            seats = [seat for seat in seats if seat.near_window]
         
         if near_fixed_socket:
-            query = query.filter(Seat.near_fixed_socket == True)
+            seats = [seat for seat in seats if seat.near_fixed_socket]
         
         if near_movable_socket:
-            query = query.filter(Seat.near_movable_socket == True)
-
-        seats = query.all()
+            seats = [seat for seat in seats if seat.near_movable_socket]
+        
         if not seats:
             return {"message": "No seats found."}, 404
         seat_data = [seat.to_dict() for seat in seats]
