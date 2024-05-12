@@ -1,3 +1,4 @@
+from db import db
 from datetime import datetime, time
 from flask import request
 from flask_restful import Resource, reqparse
@@ -100,3 +101,27 @@ class ReservationResource(Resource):
         reservation.save_to_db()
 
         return {"message": "Reservation created successfully."}, 201
+
+    
+    # cancel reservation
+    def put(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("user_id", type=int, required=True)
+        parser.add_argument("reservation_id", type=int, required=True)
+        args = parser.parse_args()
+
+        reservation = Reservation.find_by_id(args["reservation_id"])
+        if not reservation:
+            return {"message": "Reservation not found."}, 404
+        if reservation.user_id != args["user_id"]:
+            return {"message": "Reservation don't belong to this user."}, 400
+        if reservation.status == 1:
+            return {"message": "Checked reservation can't be cancelled."}, 400
+        if reservation.status == 2:
+            return {"message": "Timeout reservation can't be cancelled."}, 400
+        if reservation.status == 3:
+            return {"message": "Cancelled reservation can't be cancelled."}, 400
+        
+        reservation.status = 3
+        db.session.commit()
+        return {"message": "Reservation cancelled successfully."}, 200
