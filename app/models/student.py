@@ -44,8 +44,9 @@ class Student(db.Model):
     def find_by_student_id(cls, student_id):
         return cls.query.filter_by(student_id=student_id).first()
     
+    @classmethod
     def find_by_breach_count(cls, breach_count):
-        return cls.query.filter_by(breach_count>breach_count).all()
+        return cls.query.filter(cls.breach_count>=breach_count).all()
 
     def save_to_db(self):
         db.session.add(self)
