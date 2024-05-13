@@ -15,18 +15,21 @@ class StudentResource(Resource):
         parser.add_argument("school", type=str)
         parser.add_argument("breach_count", type=int)
         args = parser.parse_args()
-
+        
+        if not args["student_id"] or not args["name"] or not args["password"]:
+            return {"message": "Student ID, name, and password are required."}, 400
         existing_student = Student.find_by_student_id(args["student_id"])
         if existing_student:
             return {"message": "Student with this student ID already exists."}, 400
-
+        existing_student_name = Student.find_by_name(args["name"])
+        if existing_student_name:
+            return {"message": "Student with this name already exists."}, 400
         student = Student(**args)
         student.save_to_db()
 
         return {"message": "Student registered successfully."}, 201
 
-    def delete(self):
-        student_id = request.args.get('student_id')
+    def delete(self, student_id):
         if not student_id:
             return {"message": "Student ID is required in the request."}, 400
 
