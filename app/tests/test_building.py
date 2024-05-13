@@ -36,7 +36,7 @@ class BuildingTest(BasicTest):
         self.assertEqual(response.status_code, 201)
 
     def test_create_synonym_building(self):
-        response = self.building_util.create_building("Name1")
+        self.building_util.create_building("Name1")
         response = self.building_util.create_building("Name1")
         self.assertEqual(response.status_code, 400)
 
@@ -51,3 +51,14 @@ class BuildingTest(BasicTest):
         self.assertEqual(response.status_code, 400)
         response = self.building_util.create_building(open_time="08:00:00", close_time="9:00:00")
         self.assertEqual(response.status_code, 400)
+
+    def test_get_single_building(self):
+        self.building_util.create_building()
+        response = self.building_util.app.get("/api/building/1")
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_all_building(self):
+        self.building_util.create_building("Name1")
+        self.building_util.create_building("Name2")
+        response = self.building_util.app.get("/api/building")
+        self.assertEqual(response.status_code, 200)
