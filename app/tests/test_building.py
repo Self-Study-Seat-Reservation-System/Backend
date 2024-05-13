@@ -29,6 +29,12 @@ class BuildingTest(BasicTest):
         response = self.building_util.create_building()
         self.assertEqual(response.status_code, 201)
 
+    def test_create_multiple_building_successfully(self):
+        response = self.building_util.create_building("Name1")
+        self.assertEqual(response.status_code, 201)
+        response = self.building_util.create_building("Name2")
+        self.assertEqual(response.status_code, 201)
+
     def test_create_synonym_building(self):
         response = self.building_util.create_building("Name1")
         response = self.building_util.create_building("Name1")
