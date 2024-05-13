@@ -51,3 +51,8 @@ class BuildingTest(BasicTest):
         self.assertEqual(response.status_code, 400)
         response = self.building_util.create_building(open_time="08:00:00", close_time="9:00:00")
         self.assertEqual(response.status_code, 400)
+
+    def test_get_building(self):
+        response = self.building_util.create_building()
+        response = self.building_util.app.get("/api/building/1")
+        self.assertEqual(response.status_code, 200)
