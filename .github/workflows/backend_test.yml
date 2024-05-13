@@ -83,7 +83,7 @@ jobs:
           MYSQL_DATABASE=$MYSQL_DATABASE \
           python -m unittest tests/test_admin_config.py \ 
           
-       - name: Run test_student
+      - name: Run test_student
         run: |
           cd app && pwd && \
           MYSQL_RESTORE_SOURCE=$RESTORE \
@@ -92,11 +92,20 @@ jobs:
           MYSQL_DATABASE=$MYSQL_DATABASE \
           python -m unittest tests/test_student.py \    
 
-       - name: Run test_administer
+      - name: Run test_administer
         run: |
           cd app && pwd && \
           MYSQL_RESTORE_SOURCE=$RESTORE \
           MYSQL_USER=$MYSQL_USER \
           MYSQL_PASSWORD=$MYSQL_PASSWORD \
           MYSQL_DATABASE=$MYSQL_DATABASE \
-          python -m unittest tests/test_administer.py \     
+          python -m unittest tests/test_administer.py \   
+           
+      - name: Run test_room_search
+        run: |
+          cd app && pwd && \
+          MYSQL_RESTORE_SOURCE=$RESTORE \
+          MYSQL_USER=$MYSQL_USER \
+          MYSQL_PASSWORD=$MYSQL_PASSWORD \
+          MYSQL_DATABASE=$MYSQL_DATABASE \
+          python -m unittest tests/test_room_search.py \ 

@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask import request
 from flask_restful import Resource, reqparse
-from models import Room
+from models import Room, Building
 from utils.logz import create_logger
 
 class RoomSearchResource(Resource):
@@ -10,14 +10,16 @@ class RoomSearchResource(Resource):
         
     def get(self):
         campus = request.args.get("campus", type=str)
-        building_id = request.args.get("building", type=str)
+        building_id = request.args.get("building", type=int)
         school = request.args.get("school", type=str)
         available = request.args.get("available", type=bool)
 
         rooms = Room.find_all()
 
         if campus:
-            rooms = [room for room in rooms if room.campus == campus]
+            buildings = Building.query.filter_by(campus=campus).all()
+            building_ids = [building.id for building in buildings]
+            rooms = [room for room in rooms if room.building_id in building_ids]
         
         if building_id:
             rooms = [room for room in rooms if room.building_id == building_id]

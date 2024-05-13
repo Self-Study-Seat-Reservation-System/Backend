@@ -50,11 +50,6 @@ class StudentTest(BasicTest):
         response = self.student_util.create_student()
         self.assertEqual(response.status_code, 400)
     
-    def test_create_student_with_existing_name(self):
-        self.student_util.create_student()
-        response = self.student_util.create_student(name="John Doe")
-        self.assertEqual(response.status_code, 400)
-    
     def test_create_student_with_non_student_id(self):
         response = self.student_util.create_student(student_id="")
         self.assertEqual(response.status_code, 400)
