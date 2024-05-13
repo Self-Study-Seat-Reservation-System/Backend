@@ -52,6 +52,7 @@ api.add_resource(SeatSearchResource, "/api/seat/search")
 
 # student
 api.add_resource(StudentResource, "/api/student")
+api.add_resource(StudentResource, "/api/student/<string:student_id>", endpoint="student_by_id")
 
 
 if __name__ == "__main__":

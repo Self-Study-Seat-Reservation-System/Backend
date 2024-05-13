@@ -36,3 +36,13 @@ class StudentResource(Resource):
 
         student.delete_from_db()
         return {"message": "Student deleted successfully."}, 200
+    
+    def get(self, student_id):
+        if not student_id:
+            return {"message": "Student ID is required in the request."}, 400
+
+        student = Student.find_by_student_id(student_id)
+        if not student:
+            return {"message": "Student with this student ID doesn't exist."}, 404
+        
+        return {"student": student.to_dict()}, 200
