@@ -45,3 +45,7 @@ class RoomTest(BasicTest):
         self.building_util.create_building()
         response = self.room_util.create_room(school="computer")
         self.assertEqual(response.status_code, 201)
+
+    def test_create_room_without_building(self):
+        response = self.room_util.create_room(school="computer")
+        self.assertEqual(response.status_code, 404)
