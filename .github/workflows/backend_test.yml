@@ -90,4 +90,13 @@ jobs:
           MYSQL_USER=$MYSQL_USER \
           MYSQL_PASSWORD=$MYSQL_PASSWORD \
           MYSQL_DATABASE=$MYSQL_DATABASE \
-          python -m unittest tests/test_student.py \     
+          python -m unittest tests/test_student.py \    
+
+       - name: Run test_administer
+        run: |
+          cd app && pwd && \
+          MYSQL_RESTORE_SOURCE=$RESTORE \
+          MYSQL_USER=$MYSQL_USER \
+          MYSQL_PASSWORD=$MYSQL_PASSWORD \
+          MYSQL_DATABASE=$MYSQL_DATABASE \
+          python -m unittest tests/test_administer.py \     
