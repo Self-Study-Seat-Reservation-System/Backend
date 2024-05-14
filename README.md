@@ -56,3 +56,5 @@ run: |
     MYSQL_DATABASE=$MYSQL_DATABASE \
     python -m unittest tests/test_hello.py \
 ```
+
+## CI
