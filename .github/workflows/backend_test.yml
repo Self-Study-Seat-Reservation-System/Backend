@@ -73,7 +73,7 @@ jobs:
           MYSQL_PASSWORD=$MYSQL_PASSWORD \
           MYSQL_DATABASE=$MYSQL_DATABASE \
           python -m unittest tests/test_room.py \
-          
+
       - name: 🎒 Run test_student
         run: |
           cd app && pwd && \
