@@ -51,6 +51,3 @@ class AdminConfigTest(BasicTest):
         response = self.admin_config_util.update_max_reservation_duration(0)
         self.assertEqual(response.status_code, 400)
         self.assertIn("Max reservation duration must be a positive integer.", response.json["message"])
-
-
-

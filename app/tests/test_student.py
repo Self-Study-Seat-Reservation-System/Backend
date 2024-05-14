@@ -87,4 +87,3 @@ class StudentTest(BasicTest):
     def test_get_non_existing_student(self):
         response = self.student_util.get_student()
         self.assertEqual(response.status_code, 404)
-

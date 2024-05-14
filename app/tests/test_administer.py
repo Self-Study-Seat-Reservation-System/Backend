@@ -30,5 +30,3 @@ class AdministerResourceTest(BasicTest):
         self.assertEqual(response.status_code, 404)
         data = response.json
         self.assertIn("No students with breach records greater than 5 found.", data["message"])
-
-
