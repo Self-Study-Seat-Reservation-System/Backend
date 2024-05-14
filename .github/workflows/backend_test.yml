@@ -73,15 +73,6 @@ jobs:
           MYSQL_PASSWORD=$MYSQL_PASSWORD \
           MYSQL_DATABASE=$MYSQL_DATABASE \
           python -m unittest tests/test_room.py \
-
-      - name: 🔫 Run test_admin_config
-        run: |
-          cd app && pwd && \
-          MYSQL_RESTORE_SOURCE=$RESTORE \
-          MYSQL_USER=$MYSQL_USER \
-          MYSQL_PASSWORD=$MYSQL_PASSWORD \
-          MYSQL_DATABASE=$MYSQL_DATABASE \
-          python -m unittest tests/test_admin_config.py \ 
           
       - name: 🔫 Run test_student
         run: |
@@ -90,7 +81,7 @@ jobs:
           MYSQL_USER=$MYSQL_USER \
           MYSQL_PASSWORD=$MYSQL_PASSWORD \
           MYSQL_DATABASE=$MYSQL_DATABASE \
-          python -m unittest tests/test_student.py \    
+          python -m unittest tests/test_student.py \   
 
       - name: 🔫 Run test_administer
         run: |
@@ -99,7 +90,7 @@ jobs:
           MYSQL_USER=$MYSQL_USER \
           MYSQL_PASSWORD=$MYSQL_PASSWORD \
           MYSQL_DATABASE=$MYSQL_DATABASE \
-          python -m unittest tests/test_administer.py \   
+          python -m unittest tests/test_administer.py \  
            
       - name: 🔫 Run test_room_search
         run: |
@@ -108,4 +99,13 @@ jobs:
           MYSQL_USER=$MYSQL_USER \
           MYSQL_PASSWORD=$MYSQL_PASSWORD \
           MYSQL_DATABASE=$MYSQL_DATABASE \
-          python -m unittest tests/test_room_search.py \ 
+          python -m unittest tests/test_room_search.py \
+
+      - name: 🔫 Run test_admin_config
+        run: |
+          cd app && pwd && \
+          MYSQL_RESTORE_SOURCE=$RESTORE \
+          MYSQL_USER=$MYSQL_USER \
+          MYSQL_PASSWORD=$MYSQL_PASSWORD \
+          MYSQL_DATABASE=$MYSQL_DATABASE \
+          python -m unittest tests/test_admin_config.py \
