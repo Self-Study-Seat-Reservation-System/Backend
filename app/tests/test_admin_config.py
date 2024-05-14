@@ -31,6 +31,7 @@ class AdminConfigTest(BasicTest):
         self.admin_config_util = AdminConfigUtil()
     
     def test_get_max_reservation_duration(self):
+        self.admin_config_util.update_max_reservation_duration(5)
         response = self.admin_config_util.get_max_reservation_duration()
         self.assertEqual(response.status_code, 200)
         data = response.json
