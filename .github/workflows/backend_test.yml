@@ -81,7 +81,7 @@ jobs:
           MYSQL_USER=$MYSQL_USER \
           MYSQL_PASSWORD=$MYSQL_PASSWORD \
           MYSQL_DATABASE=$MYSQL_DATABASE \
-          python -m unittest tests/test_student.py \   
+          python -m unittest tests/test_student.py \
 
       - name: 💼 Run test_administer
         run: |
@@ -90,7 +90,7 @@ jobs:
           MYSQL_USER=$MYSQL_USER \
           MYSQL_PASSWORD=$MYSQL_PASSWORD \
           MYSQL_DATABASE=$MYSQL_DATABASE \
-          python -m unittest tests/test_administer.py \  
+          python -m unittest tests/test_administer.py \
 
       - name: 🔍 Run test_room_search
         run: |
