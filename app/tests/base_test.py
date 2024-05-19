@@ -9,6 +9,10 @@ class BasicUtil():
             self.app = app.test_client()
             db.drop_all()
             db.create_all()
+        
+        self.headers = {
+            "Content-Type": "application/json"
+        }
 
 class BasicTest(unittest.TestCase):
     pass
