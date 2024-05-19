@@ -69,3 +69,7 @@ class RoomTest(BasicTest):
         self.room_util.create_room()
         response = self.room_util.update_room(1, "15:00:00", "18:00:00", 0)
         self.assertEqual(response.status_code, 200)
+
+    def test_update_room_without_room(self):
+        response = self.room_util.update_room(1, "15:00:00", "18:00:00", 0)
+        self.assertEqual(response.status_code, 404)
