@@ -8,18 +8,25 @@ from unittest.mock import patch
 from utils.resource_checker import ResourceChecker
 
 class SeatUtil(BasicUtil):
-    def create_seat(self, room_id=1, near_fixed_socket=False, near_movable_socket=False, near_window=False):
-        data = {
+    def create_seat(self, room_id=1, near_fixed_socket=None, near_movable_socket=None, near_window=None):
+        data = {k: v for k, v in {
             "room_id": room_id,
             "near_fixed_socket": near_fixed_socket,
             "near_movable_socket": near_movable_socket,
             "near_window": near_window
-        }
+        }.items() if v is not None}
 
         response = self.app.post("/api/seat", headers=self.headers, json=data)
         return response
 
-    def update_seat(self, seat_id, data):
+    def update_seat(self, seat_id, near_fixed_socket=None, near_movable_socket=None, near_window=None, deprecated=None):
+        data = {k: v for k, v in {
+            "near_fixed_socket": near_fixed_socket,
+            "near_movable_socket": near_movable_socket,
+            "near_window": near_window,
+            "deprecated": deprecated
+        }.items() if v is not None}
+
         response = self.app.put(f"/api/seat/{seat_id}",  headers=self.headers, json=data)
         return response
     
@@ -67,23 +74,11 @@ class SeatTest(BasicTest):
     def test_update_seat_successfully(self):
         self.room_util.create_room()
         self.seat_util.create_seat()
-        data = {
-            "near_fixed_socket": True,
-            "near_movable_socket": False,
-            "near_window": True,
-            "deprecated": False
-        }
-        response = self.seat_util.update_seat(1, data)
+        response = self.seat_util.update_seat(1, True, False, True, False)
         self.assertEqual(response.status_code, 200)
-        data = {
-            "near_fixed_socket": False
-        }
-        response = self.seat_util.update_seat(1, data)
+        response = self.seat_util.update_seat(1, near_fixed_socket=False)
         self.assertEqual(response.status_code, 200)
 
     def test_update_seat_without_seat(self):
-        data = {
-            "near_fixed_socket": False
-        }
-        response = self.seat_util.update_seat(1, data)
+        response = self.seat_util.update_seat(1, near_fixed_socket=False)
         self.assertEqual(response.status_code, 404)
