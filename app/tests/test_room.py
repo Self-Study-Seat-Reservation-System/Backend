@@ -73,3 +73,13 @@ class RoomTest(BasicTest):
     def test_update_room_without_room(self):
         response = self.room_util.update_room(1, "15:00:00", "18:00:00", 0)
         self.assertEqual(response.status_code, 404)
+
+    def test_update_room_with_bad_time(self):
+        self.building_util.create_building()
+        self.room_util.create_room(open_time="05:00:00", close_time="18:00:00")
+        response = self.room_util.update_room(room_id=1, open_time="19:00:00")
+        self.assertEqual(response.status_code, 400)
+        response = self.room_util.update_room(room_id=1, close_time="xx:00:00")
+        self.assertEqual(response.status_code, 400)
+        response = self.room_util.update_room(room_id=1, open_time="17:00:00", close_time="15:00:00")
+        self.assertEqual(response.status_code, 400)
