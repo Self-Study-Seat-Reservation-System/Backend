@@ -21,13 +21,11 @@ class RoomUtil(BasicUtil):
         return response
 
     def update_room(self, room_id, open_time=None, close_time=None, deprecated=None):
-        data = {}
-        if open_time is not None:
-            data["open_time"] = open_time
-        if close_time is not None:
-            data["close_time"] = close_time
-        if deprecated is not None:
-            data["deprecated"] = deprecated
+        data = {k: v for k, v in {
+            "open_time": open_time,
+            "close_time": close_time,
+            "deprecated": deprecated
+        }.items() if v is not None}
         
         response = self.app.put(f"/api/room/{room_id}", headers=self.headers, json=data)
         return response
