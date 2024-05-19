@@ -19,6 +19,11 @@ class SeatUtil(BasicUtil):
         response = self.app.post("/api/seat", headers=self.headers, json=data)
         return response
 
+    def delete_seat(self, seat_id):
+        response = self.app.delete(f"/api/seat/{seat_id}")
+        return response
+
+
 class SeatTest(BasicTest):
     def setUp(self):
         self.seat_util = SeatUtil()
@@ -44,3 +49,9 @@ class SeatTest(BasicTest):
         self.room_util.delete_room(1)
         response = self.seat_util.create_seat()
         self.assertEqual(response.status_code, 400)
+
+    def test_delete_seat_successfully(self):
+        self.room_util.create_room()
+        self.seat_util.create_seat()
+        response = self.seat_util.delete_seat(1)
+        self.assertEqual(response.status_code, 200)
