@@ -19,6 +19,10 @@ class SeatUtil(BasicUtil):
         response = self.app.post("/api/seat", headers=self.headers, json=data)
         return response
 
+    def update_seat(self, seat_id, data):
+        response = self.app.put(f"/api/seat/{seat_id}",  headers=self.headers, json=data)
+        return response
+    
     def delete_seat(self, seat_id):
         response = self.app.delete(f"/api/seat/{seat_id}")
         return response
@@ -59,3 +63,20 @@ class SeatTest(BasicTest):
     def test_delete_seat_without_seat(self):
         response = self.seat_util.delete_seat(1)
         self.assertEqual(response.status_code, 404)
+
+    def test_update_seat_successfully(self):
+        self.room_util.create_room()
+        self.seat_util.create_seat()
+        data = {
+            "near_fixed_socket": True,
+            "near_movable_socket": False,
+            "near_window": True,
+            "deprecated": False
+        }
+        response = self.seat_util.update_seat(1, data)
+        self.assertEqual(response.status_code, 200)
+        data = {
+            "near_fixed_socket": False
+        }
+        response = self.seat_util.update_seat(1, data)
+        self.assertEqual(response.status_code, 200)
