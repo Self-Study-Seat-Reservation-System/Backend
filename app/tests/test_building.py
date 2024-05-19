@@ -6,10 +6,6 @@ from base_test import BasicTest, BasicUtil
 
 class BuildingUtil(BasicUtil):
     def create_building(self, name="Name1", campus="H", open_time="08:00:00", close_time="17:00:00"):
-        headers = {
-            "Content-Type": "application/json"
-        }
-
         data = {
             "name": name,
             "campus": campus,
@@ -17,7 +13,7 @@ class BuildingUtil(BasicUtil):
             "close_time": close_time
         }
 
-        response = self.app.post("/api/building", headers=headers, json=data)
+        response = self.app.post("/api/building", headers=self.headers, json=data)
         return response
 
 

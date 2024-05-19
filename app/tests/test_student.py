@@ -6,10 +6,6 @@ from base_test import BasicTest, BasicUtil
 
 class StudentUtil(BasicUtil):
     def create_student(self, student_id="23210240105", name="John Doe", password="password123", wechat_number="john_doe", school="Computer", breach_count=0):
-        headers = {
-            "Content-Type": "application/json"
-        }
-
         data = {
             "student_id": student_id,
             "name": name,
@@ -19,7 +15,7 @@ class StudentUtil(BasicUtil):
             "breach_count": breach_count
         }
 
-        response = self.app.post("/api/student", headers=headers, json=data)
+        response = self.app.post("/api/student", headers=self.headers, json=data)
         return response
 
     def get_student(self, student_id="23210240105"):

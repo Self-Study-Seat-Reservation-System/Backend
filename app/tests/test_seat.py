@@ -9,10 +9,6 @@ from utils.resource_checker import ResourceChecker
 
 class SeatUtil(BasicUtil):
     def create_seat(self, room_id=1, near_fixed_socket=False, near_movable_socket=False, near_window=False):
-        headers = {
-            "Content-Type": "application/json"
-        }
-
         data = {
             "room_id": room_id,
             "near_fixed_socket": near_fixed_socket,
@@ -20,7 +16,7 @@ class SeatUtil(BasicUtil):
             "near_window": near_window
         }
 
-        response = self.app.post("/api/seat", headers=headers, json=data)
+        response = self.app.post("/api/seat", headers=self.headers, json=data)
         return response
 
 class SeatTest(BasicTest):

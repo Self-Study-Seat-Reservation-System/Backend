@@ -21,7 +21,7 @@ class RoomUtil(BasicUtil):
         return response
 
     def delete_room(self, room_id):
-        response = self.app.delete(f"/api/room/{room_id}", headers=self.headers)
+        response = self.app.delete(f"/api/room/{room_id}")
         return response
 
 

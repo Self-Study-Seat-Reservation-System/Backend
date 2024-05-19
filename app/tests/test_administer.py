@@ -7,10 +7,7 @@ from test_student import StudentUtil
 
 class AdministerUtil(BasicUtil):
     def get_students_with_breach(self, breach_count):
-        headers = {
-            "Content-Type": "application/json"
-        }
-        response = self.app.get(f"/api/administer?breach_count={breach_count}", headers=headers)
+        response = self.app.get(f"/api/administer?breach_count={breach_count}")
         return response
 
 class AdministerResourceTest(BasicTest):
