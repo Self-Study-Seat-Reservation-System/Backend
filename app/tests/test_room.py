@@ -11,21 +11,15 @@ class RoomUtil(BasicUtil):
             "Content-Type": "application/json"
         }
 
-        if school == "":
-            data = {
-                "building_id": building_id,
-                "name": name,
-                "open_time": open_time,
-                "close_time": close_time
-            }
-        else:
-            data = {
-                "building_id": building_id,
-                "school": school,
-                "name": name,
-                "open_time": open_time,
-                "close_time": close_time
-            }
+        data = {
+            "building_id": building_id,
+            "name": name,
+            "open_time": open_time,
+            "close_time": close_time
+        }
+
+        if school:
+            data["school"] = school
 
         response = self.app.post("/api/room", headers=headers, json=data)
         return response

@@ -74,6 +74,15 @@ jobs:
           MYSQL_DATABASE=$MYSQL_DATABASE \
           python -m unittest tests/test_room.py \
 
+      - name: 🪑 Run test_seat
+        run: |
+          cd app && pwd && \
+          MYSQL_RESTORE_SOURCE=$RESTORE \
+          MYSQL_USER=$MYSQL_USER \
+          MYSQL_PASSWORD=$MYSQL_PASSWORD \
+          MYSQL_DATABASE=$MYSQL_DATABASE \
+          python -m unittest tests/test_seat.py \
+
       - name: 🎒 Run test_student
         run: |
           cd app && pwd && \
