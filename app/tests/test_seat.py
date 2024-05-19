@@ -55,3 +55,7 @@ class SeatTest(BasicTest):
         self.seat_util.create_seat()
         response = self.seat_util.delete_seat(1)
         self.assertEqual(response.status_code, 200)
+
+    def test_delete_seat_without_seat(self):
+        response = self.seat_util.delete_seat(1)
+        self.assertEqual(response.status_code, 404)
