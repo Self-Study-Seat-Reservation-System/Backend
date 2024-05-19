@@ -38,3 +38,7 @@ class SeatTest(BasicTest):
         self.room_util.create_room()
         response = self.seat_util.create_seat()
         self.assertEqual(response.status_code, 201)
+
+    def test_create_seat_without_room(self):
+        response = self.seat_util.create_seat()
+        self.assertEqual(response.status_code, 404)
