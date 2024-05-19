@@ -6,23 +6,15 @@ from base_test import BasicTest, BasicUtil
 
 class AdminConfigUtil(BasicUtil):
     def get_max_reservation_duration(self):
-        headers = {
-            "Content-Type": "application/json"
-        }
-
-        response = self.app.get("/api/adminconfig", headers=headers)
+        response = self.app.get("/api/adminconfig")
         return response
 
     def update_max_reservation_duration(self, max_reservation_duration):
-        headers = {
-            "Content-Type": "application/json"
-        }
-
         data = {
             "max_reservation_duration": max_reservation_duration
         }
 
-        response = self.app.put("/api/adminconfig", headers=headers, json=data)
+        response = self.app.put("/api/adminconfig", headers=self.headers, json=data)
         return response
 
 
