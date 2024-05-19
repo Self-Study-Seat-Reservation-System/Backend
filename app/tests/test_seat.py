@@ -80,3 +80,10 @@ class SeatTest(BasicTest):
         }
         response = self.seat_util.update_seat(1, data)
         self.assertEqual(response.status_code, 200)
+
+    def test_update_seat_without_seat(self):
+        data = {
+            "near_fixed_socket": False
+        }
+        response = self.seat_util.update_seat(1, data)
+        self.assertEqual(response.status_code, 404)
