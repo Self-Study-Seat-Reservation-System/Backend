@@ -55,4 +55,11 @@ class ReservationTest(BasicTest):
         self.seat_util.create_seat()
         response = self.reservation_util.create_reservation()
         self.assertEqual(response.status_code, 404)
+
+    def test_create_reservation_without_room(self):
+        self.room_util.create_room()
+        self.seat_util.create_seat()
+        self.student_util.create_student()
+        response = self.reservation_util.create_reservation(room_id=2)
+        self.assertEqual(response.status_code, 404)
         
