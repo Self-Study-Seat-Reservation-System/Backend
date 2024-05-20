@@ -4,6 +4,7 @@ sys.path.append(os.path.dirname(__file__))
 
 from base_test import BasicTest, BasicUtil
 from datetime import datetime
+from flask import url_for
 from test_room import RoomUtil
 from test_seat import SeatUtil
 from test_student import StudentUtil
@@ -23,6 +24,11 @@ class ReservationUtil(BasicUtil):
         }
 
         response = self.app.post("/api/reservation", headers=self.headers, json=data)
+        return response
+
+    def get_reservation(self, user_id=None, room_id=None, seat_id=None):
+        url = f"/api/reservation?user_id={user_id}&room_id={room_id}&seat_id={seat_id}"    
+        response = self.app.get(url)
         return response
 
     def cancel_reservation(self, user_id, reservation_id):
@@ -170,7 +176,7 @@ class ReservationTest(BasicTest):
         self.room_util.create_room()
         self.seat_util.create_seat()
         self.student_util.create_student()
-        self.student_util.create_student(student_id="123")
+        self.student_util.create_student(student_id="2")
         self.reservation_util.create_reservation()
         response = self.reservation_util.cancel_reservation(2, 1)
         self.assertEqual(response.status_code, 400)
@@ -183,3 +189,45 @@ class ReservationTest(BasicTest):
         self.reservation_util.cancel_reservation(1, 1)
         response = self.reservation_util.cancel_reservation(1, 1)
         self.assertEqual(response.status_code, 400)
+
+    def test_get_reservation(self):
+        for i in range(4):
+            self.room_util.create_room()
+        self.seat_util.create_seat(room_id=3)
+        self.seat_util.create_seat(room_id=4)
+        self.student_util.create_student(student_id="1")
+        self.student_util.create_student(student_id="2")
+        self.reservation_util.create_reservation(user_id=1, room_id=3, seat_id=1)
+        self.reservation_util.create_reservation(user_id=1, room_id=4, seat_id=2)
+        self.reservation_util.create_reservation(user_id=2, room_id=4, seat_id=2,
+                start_time="2024-05-20 09:00:00", end_time="2024-05-20 10:00:00")
+
+        response = self.reservation_util.get_reservation()
+        expected_response = {'reservations': [
+            {'id': 3, 'user_id': 2, 'room_id': 4, 'seat_id': 2, 'create_time': '2024-04-15T11:00:00', 'start_time': '2024-05-20T09:00:00', 'end_time': '2024-05-20T10:00:00', 'status': 0}, 
+            {'id': 1, 'user_id': 1, 'room_id': 3, 'seat_id': 1, 'create_time': '2024-04-15T11:00:00', 'start_time': '2024-05-20T15:00:00', 'end_time': '2024-05-20T16:00:00', 'status': 0}, 
+            {'id': 2, 'user_id': 1, 'room_id': 4, 'seat_id': 2, 'create_time': '2024-04-15T11:00:00', 'start_time': '2024-05-20T15:00:00', 'end_time': '2024-05-20T16:00:00', 'status': 0}]}
+        self.assertEqual(response.get_json(), expected_response)
+
+        response = self.reservation_util.get_reservation(user_id=2)
+        expected_response = {'reservations': [
+            {'id': 3, 'user_id': 2, 'room_id': 4, 'seat_id': 2, 'create_time': '2024-04-15T11:00:00', 'start_time': '2024-05-20T09:00:00', 'end_time': '2024-05-20T10:00:00', 'status': 0}]}
+        self.assertEqual(response.get_json(), expected_response)
+
+        response = self.reservation_util.get_reservation(seat_id=1)
+        expected_response = {'reservations': [
+            {'id': 1, 'user_id': 1, 'room_id': 3, 'seat_id': 1, 'create_time': '2024-04-15T11:00:00', 'start_time': '2024-05-20T15:00:00', 'end_time': '2024-05-20T16:00:00', 'status': 0}]}
+        self.assertEqual(response.get_json(), expected_response)
+
+        response = self.reservation_util.get_reservation(room_id=3)
+        expected_response = {'reservations': [
+            {'id': 1, 'user_id': 1, 'room_id': 3, 'seat_id': 1, 'create_time': '2024-04-15T11:00:00', 'start_time': '2024-05-20T15:00:00', 'end_time': '2024-05-20T16:00:00', 'status': 0}]}
+        self.assertEqual(response.get_json(), expected_response)
+
+        response = self.reservation_util.get_reservation(user_id=1, room_id=3)
+        expected_response = {'reservations': [
+            {'id': 1, 'user_id': 1, 'room_id': 3, 'seat_id': 1, 'create_time': '2024-04-15T11:00:00', 'start_time': '2024-05-20T15:00:00', 'end_time': '2024-05-20T16:00:00', 'status': 0}]}
+        self.assertEqual(response.get_json(), expected_response)
+
+        response = self.reservation_util.get_reservation(user_id=3)
+        self.assertEqual(response.status_code, 404)
