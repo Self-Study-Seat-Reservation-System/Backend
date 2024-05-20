@@ -174,3 +174,12 @@ class ReservationTest(BasicTest):
         self.reservation_util.create_reservation()
         response = self.reservation_util.cancel_reservation(2, 1)
         self.assertEqual(response.status_code, 400)
+
+    def test_cancel_reservation_cancelled(self):
+        self.room_util.create_room()
+        self.seat_util.create_seat()
+        self.student_util.create_student()
+        self.reservation_util.create_reservation()
+        self.reservation_util.cancel_reservation(1, 1)
+        response = self.reservation_util.cancel_reservation(1, 1)
+        self.assertEqual(response.status_code, 400)
