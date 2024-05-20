@@ -16,7 +16,7 @@ class SeatSearchResource(Resource):
 
         seats = Seat.find_all()
 
-        if available is not None:
+        if available:
             seats = [seat for seat in seats if not seat.deprecated]
         
         if near_window:

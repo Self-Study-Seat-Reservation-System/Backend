@@ -109,6 +109,15 @@ jobs:
           MYSQL_PASSWORD=$MYSQL_PASSWORD \
           MYSQL_DATABASE=$MYSQL_DATABASE \
           python -m unittest tests/test_room_search.py \
+      
+      - name: 🔍 Run test_seat_search
+        run: |
+          cd app && pwd && \
+          MYSQL_RESTORE_SOURCE=$RESTORE \
+          MYSQL_USER=$MYSQL_USER \
+          MYSQL_PASSWORD=$MYSQL_PASSWORD \
+          MYSQL_DATABASE=$MYSQL_DATABASE \
+          python -m unittest tests/test_seat_search.py \
 
       - name: 💾 Run test_admin_config
         run: |
