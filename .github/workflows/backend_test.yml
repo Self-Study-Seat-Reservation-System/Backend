@@ -101,6 +101,15 @@ jobs:
           MYSQL_DATABASE=$MYSQL_DATABASE \
           python -m unittest tests/test_administer.py \
 
+      - name: 📜 Run test_reservation
+        run: |
+          cd app && pwd && \
+          MYSQL_RESTORE_SOURCE=$RESTORE \
+          MYSQL_USER=$MYSQL_USER \
+          MYSQL_PASSWORD=$MYSQL_PASSWORD \
+          MYSQL_DATABASE=$MYSQL_DATABASE \
+          python -m unittest tests/test_reservation.py \
+
       - name: 🔍 Run test_room_search
         run: |
           cd app && pwd && \

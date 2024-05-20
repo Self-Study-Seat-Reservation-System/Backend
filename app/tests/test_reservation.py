@@ -25,6 +25,14 @@ class ReservationUtil(BasicUtil):
         response = self.app.post("/api/reservation", headers=self.headers, json=data)
         return response
 
+    def cancel_reservation(self, user_id, reservation_id):
+        data = {
+            "user_id": user_id,
+            "reservation_id": reservation_id
+        }
+        response = self.app.put("/api/reservation", headers=self.headers, json=data)
+        return response
+
 
 class ReservationTest(BasicTest):
     def setUp(self):
@@ -141,4 +149,37 @@ class ReservationTest(BasicTest):
         self.student_util.create_student()
         self.reservation_util.create_reservation()
         response = self.reservation_util.create_reservation()
+        self.assertEqual(response.status_code, 400)
+
+    def test_cancel_reservation_successfully(self):
+        self.room_util.create_room()
+        self.seat_util.create_seat()
+        self.student_util.create_student()
+        self.reservation_util.create_reservation()
+        response = self.reservation_util.cancel_reservation(1, 1)
+        self.assertEqual(response.status_code, 200)
+
+    def test_cancel_reservation_without_reservation(self):
+        self.room_util.create_room()
+        self.seat_util.create_seat()
+        self.student_util.create_student()
+        response = self.reservation_util.cancel_reservation(1, 1)
+        self.assertEqual(response.status_code, 404)
+
+    def test_cancel_reservation_with_wrong_user(self):
+        self.room_util.create_room()
+        self.seat_util.create_seat()
+        self.student_util.create_student()
+        self.student_util.create_student(student_id="123")
+        self.reservation_util.create_reservation()
+        response = self.reservation_util.cancel_reservation(2, 1)
+        self.assertEqual(response.status_code, 400)
+
+    def test_cancel_reservation_cancelled(self):
+        self.room_util.create_room()
+        self.seat_util.create_seat()
+        self.student_util.create_student()
+        self.reservation_util.create_reservation()
+        self.reservation_util.cancel_reservation(1, 1)
+        response = self.reservation_util.cancel_reservation(1, 1)
         self.assertEqual(response.status_code, 400)
