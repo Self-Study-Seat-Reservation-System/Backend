@@ -76,3 +76,11 @@ class ReservationTest(BasicTest):
         self.student_util.create_student()
         response = self.reservation_util.create_reservation()
         self.assertEqual(response.status_code, 404)
+
+    def test_create_reservation_with_deprecated_seat(self):
+        self.room_util.create_room()
+        self.seat_util.create_seat()
+        self.seat_util.delete_seat(1)
+        self.student_util.create_student()
+        response = self.reservation_util.create_reservation()
+        self.assertEqual(response.status_code, 400)
