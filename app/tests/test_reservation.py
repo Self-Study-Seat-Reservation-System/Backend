@@ -99,3 +99,38 @@ class ReservationTest(BasicTest):
         self.student_util.create_student()
         response = self.reservation_util.create_reservation()
         self.assertEqual(response.status_code, 400)
+
+    def test_create_reservation_with_bad_time(self):
+        self.room_util.create_room()
+        self.seat_util.create_seat()
+        self.student_util.create_student()
+        response = self.reservation_util.create_reservation(start_time="2024:05:20:15:00:00")
+        self.assertEqual(response.status_code, 400)
+        
+        response = self.reservation_util.create_reservation(
+            start_time="2024-05-20 15:00:00", end_time="2024-05-20 13:00:00")
+        self.assertEqual(response.status_code, 400)
+        
+        response = self.reservation_util.create_reservation(
+            start_time="2024-05-20 15:00:00", end_time="2024-05-21 13:00:00")
+        self.assertEqual(response.status_code, 400)
+        
+        response = self.reservation_util.create_reservation(
+            start_time="2024-04-15 09:00:00", end_time="2024-04-15 12:00:00")
+        self.assertEqual(response.status_code, 400)
+        
+        response = self.reservation_util.create_reservation(
+            start_time="2024-05-20 15:00:00", end_time="2024-05-20 15:30:00")
+        self.assertEqual(response.status_code, 400)
+
+        response = self.reservation_util.create_reservation(
+            start_time="2024-05-20 09:00:00", end_time="2024-05-20 16:00:00")
+        self.assertEqual(response.status_code, 400)
+
+        response = self.reservation_util.create_reservation(
+            start_time="2024-05-20 01:00:00", end_time="2024-05-20 03:00:00")
+        self.assertEqual(response.status_code, 400)
+
+        response = self.reservation_util.create_reservation(
+            start_time="2024-05-20 21:00:00", end_time="2024-05-20 22:00:00")
+        self.assertEqual(response.status_code, 400)
