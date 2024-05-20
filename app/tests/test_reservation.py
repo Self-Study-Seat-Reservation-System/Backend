@@ -84,3 +84,11 @@ class ReservationTest(BasicTest):
         self.student_util.create_student()
         response = self.reservation_util.create_reservation()
         self.assertEqual(response.status_code, 400)
+
+    def test_create_reservation_with_dismatch_seat(self):
+        self.room_util.create_room()
+        self.room_util.create_room()
+        self.seat_util.create_seat(room_id=2)
+        self.student_util.create_student()
+        response = self.reservation_util.create_reservation()
+        self.assertEqual(response.status_code, 400)
