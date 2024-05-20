@@ -27,7 +27,7 @@ class RoomSearchResource(Resource):
         if school:
             rooms = [room for room in rooms if room.school == school]
 
-        if available is not None:
+        if available:
             current_time = datetime.now().time()
             rooms = [room for room in rooms if not room.deprecated and room.open_time <= current_time <= room.close_time]
             
