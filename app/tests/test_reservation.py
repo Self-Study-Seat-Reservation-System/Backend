@@ -134,3 +134,11 @@ class ReservationTest(BasicTest):
         response = self.reservation_util.create_reservation(
             start_time="2024-05-20 21:00:00", end_time="2024-05-20 22:00:00")
         self.assertEqual(response.status_code, 400)
+
+    def test_create_reservation_with_conflict(self):
+        self.room_util.create_room()
+        self.seat_util.create_seat()
+        self.student_util.create_student()
+        self.reservation_util.create_reservation()
+        response = self.reservation_util.create_reservation()
+        self.assertEqual(response.status_code, 400)
