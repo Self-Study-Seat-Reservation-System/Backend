@@ -16,16 +16,16 @@ class SeatSearchResource(Resource):
 
         seats = Seat.find_all()
 
-        if available:
+        if available == True:
             seats = [seat for seat in seats if not seat.deprecated]
         
-        if near_window:
+        if near_window == True:
             seats = [seat for seat in seats if seat.near_window]
         
-        if near_fixed_socket:
+        if near_fixed_socket == True:
             seats = [seat for seat in seats if seat.near_fixed_socket]
         
-        if near_movable_socket:
+        if near_movable_socket == True:
             seats = [seat for seat in seats if seat.near_movable_socket]
         
         if not seats:
