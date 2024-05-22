@@ -56,3 +56,20 @@ run: |
     MYSQL_DATABASE=$MYSQL_DATABASE \
     python -m unittest tests/test_hello.py \
 ```
+
+
+## docker使用
+```
+docker-compose up --build
+```
+默认使用5000端口，可以通过修改环境变量的方式指定`export HOST_PORT=5001`
+
+
+推荐使用如下指令
+```
+docker-compose down -v # 清理数据
+
+docker ps
+docker exec -it <container_name_or_id> mysql -uroot -p # 进入docker查看数据库
+docker exec -it <container_id_or_name> /bin/bash # 进入docker
+```
