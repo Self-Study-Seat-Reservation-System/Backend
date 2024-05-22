@@ -1,3 +1,7 @@
+CREATE DATABASE IF NOT EXISTS seat_reservation;
+
+USE seat_reservation;
+
 CREATE TABLE Student (
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	student_id VARCHAR(11) NOT NULL,

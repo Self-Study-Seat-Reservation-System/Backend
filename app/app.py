@@ -1,6 +1,8 @@
 from flask import Flask
 from flask_restful import Api
 
+from config import Config
+
 from initializers import mysql
 
 from resources.admin_config import AdminConfigResource
@@ -56,4 +58,5 @@ api.add_resource(StudentResource, "/api/student/<string:student_id>", endpoint="
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host=Config.HOST_IP, port=Config.HOST_PORT)
+
