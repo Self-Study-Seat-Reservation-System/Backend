@@ -3,14 +3,23 @@ import os
 sys.path.append(os.path.dirname(__file__))
 
 from base_test import BasicTest, BasicUtil
+from datetime import datetime
 from test_building import BuildingUtil
 from test_room import RoomUtil
+from unittest.mock import patch
+from utils.time import TimeService
 
 class RoomSearchTest(BasicTest):
     def setUp(self):
+        self.time_patcher = patch.object(TimeService, 'get_current_time')
+        self.mock_time = self.time_patcher.start()
+        self.mock_time.return_value = datetime(2024, 4, 15, 11, 00, 0)
         self.building_util = BuildingUtil()
         self.room_util = RoomUtil()
-    
+
+    def tearDown(self):
+        self.time_patcher.stop()
+            
     def test_search_room_by_campus(self):
         self.building_util.create_building(campus="H")
         self.building_util.create_building(campus="B")
