@@ -20,7 +20,14 @@ class ReservationResource(Resource):
         if not reservations:
             return {"message": "Reservations not found."}, 404
 
-        reservation_list = [reservation.to_dict() for reservation in reservations]
+        reservation_list = []
+        for reservation, room_name, building_name in reservations:
+            reservation_dict = reservation.to_dict()
+            reservation_dict.update({
+                "room_name": room_name,
+                "building_name": building_name
+            })
+            reservation_list.append(reservation_dict)
 
         return {"reservations": reservation_list}, 200
 
