@@ -12,7 +12,7 @@ class SeatSearchTest(BasicTest):
         self.building_util = BuildingUtil()
         self.room_util = RoomUtil()
         self.seat_util = SeatUtil()
-
+        
     def test_search_seat_by_availability(self):
         self.building_util.create_building()
         self.room_util.create_room()

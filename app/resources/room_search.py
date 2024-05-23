@@ -3,6 +3,7 @@ from flask import request
 from flask_restful import Resource, reqparse
 from models import Room, Building
 from utils.logz import create_logger
+from utils.time import TimeService
 
 class RoomSearchResource(Resource):
     def __init__(self):
@@ -28,8 +29,8 @@ class RoomSearchResource(Resource):
             rooms = [room for room in rooms if room.school == school]
 
         if available == True:
-            current_time = datetime.now().time()
-            rooms = [room for room in rooms if not room.deprecated and room.open_time <= current_time <= room.close_time]
+            current_time = TimeService.get_current_time()
+            rooms = [room for room in rooms if not room.deprecated and room.open_time < current_time.time() < room.close_time]
             
         if not rooms:
             return {"message": "No rooms found."}, 404
