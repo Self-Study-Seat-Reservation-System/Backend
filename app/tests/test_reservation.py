@@ -5,11 +5,11 @@ sys.path.append(os.path.dirname(__file__))
 from base_test import BasicTest, BasicUtil
 from datetime import datetime
 from flask import url_for
+from test_building import BuildingUtil
 from test_room import RoomUtil
 from test_seat import SeatUtil
 from test_student import StudentUtil
 from unittest.mock import patch
-from utils.resource_checker import ResourceChecker
 from utils.time import TimeService
 
 class ReservationUtil(BasicUtil):
@@ -42,19 +42,19 @@ class ReservationUtil(BasicUtil):
 
 class ReservationTest(BasicTest):
     def setUp(self):
-        self.checker_patcher = patch.object(ResourceChecker, 'check_building_available')
-        self.mock_check = self.checker_patcher.start()
-        self.mock_check.return_value = ({"message": "Building is available."}, 200)
         self.time_patcher = patch.object(TimeService, 'get_current_time')
         self.mock_time = self.time_patcher.start()
         self.mock_time.return_value = datetime(2024, 4, 15, 11, 00, 0)
+        
+        self.building_util = BuildingUtil()
         self.seat_util = SeatUtil()
         self.room_util = RoomUtil()
         self.student_util = StudentUtil()
         self.reservation_util = ReservationUtil()
 
+        self.building_util.create_building()
+
     def tearDown(self):
-        self.checker_patcher.stop()
         self.time_patcher.stop()
 
     def test_create_reservation_successfully(self):
@@ -192,7 +192,7 @@ class ReservationTest(BasicTest):
 
     def test_get_reservation(self):
         for i in range(4):
-            self.room_util.create_room()
+            self.room_util.create_room(name=f"room{i}")
         self.seat_util.create_seat(room_id=3)
         self.seat_util.create_seat(room_id=4)
         self.student_util.create_student(student_id="1")
@@ -204,29 +204,29 @@ class ReservationTest(BasicTest):
 
         response = self.reservation_util.get_reservation()
         expected_response = {'reservations': [
-            {'id': 3, 'user_id': 2, 'room_id': 4, 'seat_id': 2, 'create_time': '2024-04-15T11:00:00', 'start_time': '2024-05-20T09:00:00', 'end_time': '2024-05-20T10:00:00', 'status': 0}, 
-            {'id': 1, 'user_id': 1, 'room_id': 3, 'seat_id': 1, 'create_time': '2024-04-15T11:00:00', 'start_time': '2024-05-20T15:00:00', 'end_time': '2024-05-20T16:00:00', 'status': 0}, 
-            {'id': 2, 'user_id': 1, 'room_id': 4, 'seat_id': 2, 'create_time': '2024-04-15T11:00:00', 'start_time': '2024-05-20T15:00:00', 'end_time': '2024-05-20T16:00:00', 'status': 0}]}
+            {'id': 3, 'user_id': 2, 'room_id': 4, 'seat_id': 2, 'create_time': '2024-04-15T11:00:00', 'start_time': '2024-05-20T09:00:00', 'end_time': '2024-05-20T10:00:00', 'status': 0, 'room_name': 'room3', 'building_name': 'Name1'}, 
+            {'id': 1, 'user_id': 1, 'room_id': 3, 'seat_id': 1, 'create_time': '2024-04-15T11:00:00', 'start_time': '2024-05-20T15:00:00', 'end_time': '2024-05-20T16:00:00', 'status': 0, 'room_name': 'room2', 'building_name': 'Name1'}, 
+            {'id': 2, 'user_id': 1, 'room_id': 4, 'seat_id': 2, 'create_time': '2024-04-15T11:00:00', 'start_time': '2024-05-20T15:00:00', 'end_time': '2024-05-20T16:00:00', 'status': 0, 'room_name': 'room3', 'building_name': 'Name1'}]}
         self.assertEqual(response.get_json(), expected_response)
 
         response = self.reservation_util.get_reservation(user_id=2)
         expected_response = {'reservations': [
-            {'id': 3, 'user_id': 2, 'room_id': 4, 'seat_id': 2, 'create_time': '2024-04-15T11:00:00', 'start_time': '2024-05-20T09:00:00', 'end_time': '2024-05-20T10:00:00', 'status': 0}]}
+            {'id': 3, 'user_id': 2, 'room_id': 4, 'seat_id': 2, 'create_time': '2024-04-15T11:00:00', 'start_time': '2024-05-20T09:00:00', 'end_time': '2024-05-20T10:00:00', 'status': 0, 'room_name': 'room3', 'building_name': 'Name1'}]}  
         self.assertEqual(response.get_json(), expected_response)
 
         response = self.reservation_util.get_reservation(seat_id=1)
         expected_response = {'reservations': [
-            {'id': 1, 'user_id': 1, 'room_id': 3, 'seat_id': 1, 'create_time': '2024-04-15T11:00:00', 'start_time': '2024-05-20T15:00:00', 'end_time': '2024-05-20T16:00:00', 'status': 0}]}
+            {'id': 1, 'user_id': 1, 'room_id': 3, 'seat_id': 1, 'create_time': '2024-04-15T11:00:00', 'start_time': '2024-05-20T15:00:00', 'end_time': '2024-05-20T16:00:00', 'status': 0, 'room_name': 'room2', 'building_name': 'Name1'}]}
         self.assertEqual(response.get_json(), expected_response)
 
         response = self.reservation_util.get_reservation(room_id=3)
         expected_response = {'reservations': [
-            {'id': 1, 'user_id': 1, 'room_id': 3, 'seat_id': 1, 'create_time': '2024-04-15T11:00:00', 'start_time': '2024-05-20T15:00:00', 'end_time': '2024-05-20T16:00:00', 'status': 0}]}
+            {'id': 1, 'user_id': 1, 'room_id': 3, 'seat_id': 1, 'create_time': '2024-04-15T11:00:00', 'start_time': '2024-05-20T15:00:00', 'end_time': '2024-05-20T16:00:00', 'status': 0, 'room_name': 'room2', 'building_name': 'Name1'}]}
         self.assertEqual(response.get_json(), expected_response)
 
         response = self.reservation_util.get_reservation(user_id=1, room_id=3)
         expected_response = {'reservations': [
-            {'id': 1, 'user_id': 1, 'room_id': 3, 'seat_id': 1, 'create_time': '2024-04-15T11:00:00', 'start_time': '2024-05-20T15:00:00', 'end_time': '2024-05-20T16:00:00', 'status': 0}]}
+            {'id': 1, 'user_id': 1, 'room_id': 3, 'seat_id': 1, 'create_time': '2024-04-15T11:00:00', 'start_time': '2024-05-20T15:00:00', 'end_time': '2024-05-20T16:00:00', 'status': 0, 'room_name': 'room2', 'building_name': 'Name1'}]}
         self.assertEqual(response.get_json(), expected_response)
 
         response = self.reservation_util.get_reservation(user_id=3)

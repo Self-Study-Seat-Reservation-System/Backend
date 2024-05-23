@@ -1,4 +1,6 @@
 from db import db
+from models.building import Building
+from models.room import Room
 
 # CREATE TABLE Reservation (
 # 		id INT PRIMARY KEY,
@@ -63,7 +65,10 @@ class Reservation(db.Model):
     
     @classmethod
     def find(cls, **args):
-        query = cls.query
+        query = cls.query \
+            .join(Room, cls.room_id==Room.id) \
+            .join(Building, Room.building_id == Building.id) \
+            .add_columns(Room.name.label('room_name'), Building.name.label('building_name'))
         for key, value in args.items():
             if value is None:
                 continue
