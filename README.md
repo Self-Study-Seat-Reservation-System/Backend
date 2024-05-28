@@ -57,12 +57,24 @@ run: |
     python -m unittest tests/test_hello.py \
 ```
 
+## CD
+使用git tag的方式进行发布，见[华为云流水线](https://devcloud.cn-north-4.huaweicloud.com/cicd/project/8ac6cbe6f41648a3a757004f3e2e6ed0/pipeline/history/5456ec71082e45adbb677e4197dd94ac?from=in-project&v=1)，自动推送至华为云容器镜像服务（[backend_db](https://console.huaweicloud.com/swr/?region=cn-north-4#/swr/warehouse/detail/kikor97/seat-reservation-system/backend_db/tag) [backend_backend](https://console.huaweicloud.com/swr/?region=cn-north-4#/swr/warehouse/detail/kikor97/seat-reservation-system/backend_backend/tag)）
+
 
 ## docker使用
+- 本地构建
 ```
 docker-compose up --build
 ```
 默认使用5000端口，可以通过修改环境变量的方式指定`export HOST_PORT=5001`
+
+- 使用远端仓库
+
+1. 修改docker-compose.remote.yml中version镜像版本
+2. 登录[华为云容器镜像服务](https://console.huaweicloud.com/swr/?region=cn-north-4#/swr/create/experience?kind=pullpush)
+```
+docker-compose -f docker-compose.remote.yml up
+```
 
 
 推荐使用如下指令
