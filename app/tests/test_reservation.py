@@ -31,6 +31,11 @@ class ReservationUtil(BasicUtil):
         response = self.app.get(url)
         return response
 
+    def check_reservation(self, user_id=None, room_id=None, reservation_id=None):
+        url = f"/api/reservation?user_id={user_id}&room_id={room_id}&reservation_id={reservation_id}"    
+        response = self.app.delete(url)
+        return response
+
     def cancel_reservation(self, user_id, reservation_id):
         data = {
             "user_id": user_id,
@@ -188,6 +193,48 @@ class ReservationTest(BasicTest):
         self.reservation_util.create_reservation()
         self.reservation_util.cancel_reservation(1, 1)
         response = self.reservation_util.cancel_reservation(1, 1)
+        self.assertEqual(response.status_code, 400)
+
+    def test_check_reservation_successfully(self):
+        self.room_util.create_room()
+        self.seat_util.create_seat()
+        self.student_util.create_student()
+        self.reservation_util.create_reservation()
+        response = self.reservation_util.check_reservation(1, 1, 1)
+        self.assertEqual(response.status_code, 200)
+
+    def test_check_reservation_without_reservation(self):
+        self.room_util.create_room()
+        self.seat_util.create_seat()
+        self.student_util.create_student()
+        response = self.reservation_util.check_reservation(1, 1, 1)
+        self.assertEqual(response.status_code, 404)
+
+    def test_check_reservation_with_wrong_user(self):
+        self.room_util.create_room()
+        self.seat_util.create_seat()
+        self.student_util.create_student()
+        self.student_util.create_student(student_id="2")
+        self.reservation_util.create_reservation()
+        response = self.reservation_util.check_reservation(2, 1, 1)
+        self.assertEqual(response.status_code, 400)
+
+    def test_check_reservation_cancelled(self):
+        self.room_util.create_room()
+        self.seat_util.create_seat()
+        self.student_util.create_student()
+        self.reservation_util.create_reservation()
+        self.reservation_util.cancel_reservation(1, 1)
+        response = self.reservation_util.check_reservation(1, 1, 1)
+        self.assertEqual(response.status_code, 400)
+
+    def test_check_reservation_checked(self):
+        self.room_util.create_room()
+        self.seat_util.create_seat()
+        self.student_util.create_student()
+        self.reservation_util.create_reservation()
+        self.reservation_util.check_reservation(1, 1, 1)
+        response = self.reservation_util.check_reservation(1, 1, 1)
         self.assertEqual(response.status_code, 400)
 
     def test_get_reservation(self):

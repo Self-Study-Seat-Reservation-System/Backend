@@ -130,3 +130,30 @@ class ReservationResource(Resource):
         reservation.status = 3
         db.session.commit()
         return {"message": "Reservation cancelled successfully."}, 200
+
+
+    # check-in reservation
+    def delete(self):
+        user_id = request.args.get("user_id", default=None, type=int)
+        room_id = request.args.get("room_id", default=None, type=int)
+        reservation_id = request.args.get("reservation_id", default=None, type=int)
+        reservation = Reservation.find_by_id(reservation_id)
+
+        if not reservation:
+            return {"message": "Reservations not found."}, 404
+
+        if reservation.user_id != user_id:
+            return {"message": "Reservation don't belong to this user."}, 400
+        if reservation.room_id != room_id:
+            return {"message": "Reservation don't belong to this room."}, 400
+
+        if reservation.status == 1:
+            return {"message": "Checked reservation can't be checked."}, 400
+        if reservation.status == 2:
+            return {"message": "Timeout reservation can't be checked."}, 400
+        if reservation.status == 3:
+            return {"message": "Cancelled reservation can't be checked."}, 400
+
+        reservation.status = 1
+        db.session.commit()
+        return {"message": "Reservation checked successfully."}, 200
