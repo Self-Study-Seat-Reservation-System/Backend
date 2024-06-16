@@ -1,4 +1,4 @@
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 
 class TimeService:
     @staticmethod
@@ -24,3 +24,9 @@ class TimeService:
         if end_time2 <= start_time1:
             return False
         return True
+
+    @classmethod
+    def get_seconds_from(cls, appointment_time, delta):
+        reminder_time = appointment_time + timedelta(minutes=delta)
+        delay = (reminder_time - cls.get_current_time()).total_seconds()
+        return delay

@@ -3,6 +3,7 @@ from datetime import datetime, time
 from flask import request
 from flask_restful import Resource, reqparse
 from models import AdminConfig, Reservation, Room, Seat, Student
+from resources.reminder import ReminderCreater
 from utils.logz import create_logger
 from utils.time import TimeService
 from utils.resource_checker import ResourceChecker
@@ -10,6 +11,7 @@ from utils.resource_checker import ResourceChecker
 class ReservationResource(Resource):
     def __init__(self):
         self.logger = create_logger("reservation")
+        self.reminder_creater = ReminderCreater()
 
     def get(self):
         user_id = request.args.get("user_id", default=None, type=int)
@@ -104,6 +106,8 @@ class ReservationResource(Resource):
 
         reservation = Reservation(**args)
         reservation.save_to_db()
+
+        self.reminder_creater.batch_create_reminder(start_time, reservation.id)
 
         return {"message": "Reservation created successfully."}, 201
 
