@@ -121,7 +121,7 @@ class TimeoutReminder(Reminder):
         message = {
             # TODO: get user token
             "touser": "??? todo",
-            "template_id": "tqzj_BWEEZyBtq8RgFKrVE0rvknsDN",
+            "template_id": "tqzj_BWEEZyBtq8RgFKrVE0rvknsDNzvUPDoKOG4U4k",
             "miniprogram_state": "trial",
             "lang": "zh_CN",
             "data": {
