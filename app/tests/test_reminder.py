@@ -35,11 +35,12 @@ class ReminderTest(BasicTest):
         self.time_patcher.stop()
         self.reminder_patcher.stop()
 
-    def test_reminder_once(self):
+    def test_reminder(self):
         self.room_util.create_room()
         self.seat_util.create_seat()
         self.student_util.create_student()
         self.reservation_util.create_reservation()
         self.mock_reminder.assert_called_once()
 
-        
+    # 关于测试具体的reminder对象，我的建议是mock requests，调用send_reminder系列，检查发送的message信息是否正确
+    # 也就是说，多线程和与微信服务器交互部分不参与单元测试
