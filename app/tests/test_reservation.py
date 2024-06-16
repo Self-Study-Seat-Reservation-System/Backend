@@ -5,6 +5,7 @@ sys.path.append(os.path.dirname(__file__))
 from base_test import BasicTest, BasicUtil
 from datetime import datetime
 from flask import url_for
+from resources.reminder import ReminderCreater
 from test_building import BuildingUtil
 from test_room import RoomUtil
 from test_seat import SeatUtil
@@ -50,6 +51,8 @@ class ReservationTest(BasicTest):
         self.time_patcher = patch.object(TimeService, 'get_current_time')
         self.mock_time = self.time_patcher.start()
         self.mock_time.return_value = datetime(2024, 4, 15, 11, 00, 0)
+        self.reminder_patcher = patch.object(ReminderCreater, 'batch_create_reminder')
+        self.mock_reminder = self.reminder_patcher.start()
         
         self.building_util = BuildingUtil()
         self.seat_util = SeatUtil()
@@ -61,6 +64,7 @@ class ReservationTest(BasicTest):
 
     def tearDown(self):
         self.time_patcher.stop()
+        self.reminder_patcher.stop()
 
     def test_create_reservation_successfully(self):
         self.room_util.create_room()
