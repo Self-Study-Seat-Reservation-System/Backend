@@ -17,12 +17,12 @@ class ReminderCreater:
         self.timeout_reminder = TimeoutReminder()
     
     def batch_create_reminder(self, start_time, reservation_id):
-        delay_once = TimeService.get_seconds_from(start_time, -15)
+        delay_once = TimeService.get_seconds_before(start_time, -15)
         if (delay_once > 0):
             self.once_reminder.create_reminder(delay_once, reservation_id)
-        delay_twice = TimeService.get_seconds_from(start_time, 10)
+        delay_twice = TimeService.get_seconds_before(start_time, 10)
         self.twice_reminder.create_reminder(delay_twice, reservation_id)
-        delay_timeout = TimeService.get_seconds_from(start_time, 15)
+        delay_timeout = TimeService.get_seconds_before(start_time, 15)
         self.timeout_reminder.create_reminder(delay_timeout, reservation_id)
 
 class Reminder:
@@ -30,7 +30,7 @@ class Reminder:
         timer = Timer(delay, self.send_reminder, args=(reservation_id,))
         timer.start()
 
-    def send_request(message):
+    def send_request(self, message):
         # TODO: get access token
         access_token = "MY_ACCESS_TOKEN"
         url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=" + access_token
@@ -38,7 +38,7 @@ class Reminder:
 
 
 class OnceReminder(Reminder):
-    def send_reminder(self, delay, reservation_id):
+    def send_reminder(self, reservation_id):
         reservation = Reservation.find_by_id(reservation_id)
         if reservation.status != 0:
             return
@@ -74,7 +74,7 @@ class OnceReminder(Reminder):
 
 
 class TwiceReminder(Reminder):
-    def send_reminder(reservation_id):
+    def send_reminder(self, reservation_id):
         reservation = Reservation.find_by_id(reservation_id)
         if reservation.status != 0:
             return
@@ -107,7 +107,7 @@ class TwiceReminder(Reminder):
 
 
 class TimeoutReminder(Reminder):
-    def send_reminder(reservation_id):
+    def send_reminder(self, reservation_id):
         reservation = Reservation.find_by_id(reservation_id)
         if reservation.status != 0:
             return
@@ -141,6 +141,5 @@ class TimeoutReminder(Reminder):
         reservation.status = 2
         reservation.save_to_db()
 
-        student = Student.find_by_id(reservation.user_id)
         student.breach_count += 1
         student.save_to_db()

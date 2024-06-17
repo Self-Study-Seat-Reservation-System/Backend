@@ -26,7 +26,7 @@ class TimeService:
         return True
 
     @classmethod
-    def get_seconds_from(cls, appointment_time, delta):
+    def get_seconds_before(cls, appointment_time, delta):
         reminder_time = appointment_time + timedelta(minutes=delta)
         delay = (reminder_time - cls.get_current_time()).total_seconds()
         return delay
