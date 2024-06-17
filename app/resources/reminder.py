@@ -57,7 +57,7 @@ class OnceReminder(Reminder):
             "lang": "zh_CN",
             "data": {
                 "name1": {
-                    "value": studnet.name
+                    "value": student.name
                 },
                 "thing2": {
                     "value": building.name + " " + room.name + " " + reservation.seat_id
@@ -93,7 +93,7 @@ class TwiceReminder(Reminder):
             "lang": "zh_CN",
             "data": {
                 "thing9": {
-                    "value": studnet.name
+                    "value": student.name
                 },
                 "thing15": {
                     "value": building.name + " " + room.name + " " + reservation.seat_id
@@ -126,7 +126,7 @@ class TimeoutReminder(Reminder):
             "lang": "zh_CN",
             "data": {
                 "thing1": {
-                    "value": studnet.name
+                    "value": student.name
                 },
                 "thing3": {
                     "value": building.name + " " + room.name + " " + reservation.seat_id
