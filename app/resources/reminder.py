@@ -9,6 +9,7 @@ from threading import Timer
 from utils.logz import create_logger
 from utils.time import TimeService
 from utils.resource_checker import ResourceChecker
+from utils.wx import WX
 
 class ReminderCreater:
     def __init__(self):
@@ -31,10 +32,7 @@ class Reminder:
         timer.start()
 
     def send_request(self, message):
-        # TODO: get access token
-        access_token = "MY_ACCESS_TOKEN"
-        url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=" + access_token
-        requests.post(url, json=message)
+        WX.send_subscribe(message)
 
 
 class OnceReminder(Reminder):
@@ -50,8 +48,7 @@ class OnceReminder(Reminder):
         end_time = reservation.end_time.strftime('%Y-%m-%d %H:%M:%S')
 
         message = {
-            # TODO: get user token
-            "touser": "??? todo",
+            "touser": student.openid,
             "template_id": "5Cdabe6_ge7um2uK88xJ8OwfprBqwKjQXCkclh-sbtQ",
             "miniprogram_state": "trial",
             "lang": "zh_CN",
@@ -86,8 +83,7 @@ class TwiceReminder(Reminder):
         end_time = reservation.end_time.strftime('%Y-%m-%d %H:%M:%S')
 
         message = {
-            # TODO: get user token
-            "touser": "??? todo",
+            "touser": student.openid,
             "template_id": "OcD8novN3sx8DP8-Sd2wZEpSmC7rIo0Po-3z7tI7SUo",
             "miniprogram_state": "trial",
             "lang": "zh_CN",
@@ -119,8 +115,7 @@ class TimeoutReminder(Reminder):
         end_time = reservation.end_time.strftime('%Y-%m-%d %H:%M:%S')
 
         message = {
-            # TODO: get user token
-            "touser": "??? todo",
+            "touser": student.openid,
             "template_id": "tqzj_BWEEZyBtq8RgFKrVE0rvknsDNzvUPDoKOG4U4k",
             "miniprogram_state": "trial",
             "lang": "zh_CN",

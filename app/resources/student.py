@@ -21,6 +21,7 @@ class StudentResource(Resource):
         existing_student = Student.find_by_student_id(args["student_id"])
         if existing_student:
             return {"message": "Student with this student ID already exists."}, 400
+
         student = Student(**args)
         student.save_to_db()
 

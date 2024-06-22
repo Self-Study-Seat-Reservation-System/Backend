@@ -2,6 +2,7 @@ from db import db
 
 # CREATE TABLE Student (
 # 		id INT PRIMARY KEY,
+#       openid VARCHAR(50),
 #       student_id VARCHAR(11) NOT NULL,
 # 		name VARCHAR(50) NOT NULL,
 # 		password VARCHAR(255) NOT NULL,
@@ -15,6 +16,7 @@ class Student(db.Model):
     __tablename__ = "student"
 
     id = db.Column(db.Integer, primary_key=True)
+    openid = db.Column(db.String(50))
     student_id = db.Column(db.String(11), unique=True, nullable=False)
     name = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(255), nullable=False)
@@ -25,6 +27,7 @@ class Student(db.Model):
     def to_dict(self):
         return {
             "id": self.id,
+            "openid": self.openid,
             "student_id": self.student_id,
             "name": self.name,
             "wechat_id": self.wechat_number,
@@ -47,6 +50,10 @@ class Student(db.Model):
     @classmethod
     def find_by_breach_count(cls, breach_count):
         return cls.query.filter(cls.breach_count>=breach_count).all()
+    
+    @classmethod
+    def find_by_openid(cls, openid):
+        return cls.query.filter_by(openid=openid).first()
 
     def save_to_db(self):
         db.session.add(self)
