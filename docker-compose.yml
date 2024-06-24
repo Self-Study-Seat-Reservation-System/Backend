@@ -7,6 +7,7 @@ services:
       args:
         - MYSQL_USER=${MYSQL_USER}
         - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    platform: linux/amd64
     ports:
       - "${MYSQL_PORT}:3306"
     healthcheck:
@@ -19,6 +20,7 @@ services:
     build:
       context: .
       dockerfile: docker/backend/dockerfile
+    platform: linux/amd64
     ports:
       - "5000:5000"
     environment:
