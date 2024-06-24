@@ -1,5 +1,5 @@
 # cat Dockerfile
-FROM mysql:latest
+FROM swr.cn-north-4.myhuaweicloud.com/seat-reservation-system/mysql:8.4.0
 
 ARG MYSQL_USER
 ARG MYSQL_PASSWORD
