@@ -25,6 +25,7 @@ class WX:
         if response.status_code != 200:
             return "wx server error"
         
+        error_msg = ""
         errcode =  response.json().get("errcode")
         match errcode:
             case 40029:
