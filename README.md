@@ -68,6 +68,8 @@ docker-compose up --build
 ```
 默认使用5000端口，可以通过修改环境变量的方式指定`export HOST_PORT=5001`
 
+db镜像的初始化数据会保存在`./sql`目录下，可以通过修改DOCKERIFLE修改初始化数据
+
 - 使用远端仓库
 
 1. 修改docker-compose.remote.yml中version镜像版本
