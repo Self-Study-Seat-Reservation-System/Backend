@@ -1,10 +1,14 @@
 import requests
 from utils.logz import create_logger
+from utils.time import TimeService
+from config import Config
 
 class WX:
-    APPID = ""
-    SECRET = ""
+    APPID = Config.APPID
+    SECRET = Config.SECRET
     ACCESS_TOKEN = ""
+    UPTATE_TIME = TimeService.get_current_time()
+    EXPRIRE_TIME = 7200
     logger = create_logger("wx")
 
     @staticmethod
@@ -41,7 +45,7 @@ class WX:
     def send_subscribe(message):
         url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send"
         params = {
-            "access_token": WX.ACCESS_TOKEN
+            "access_token": WX.get_access_token()
         }
 
         response = requests.post(url, params=params, json=message)
@@ -60,4 +64,12 @@ class WX:
             return "wx server error"
         
         WX.ACCESS_TOKEN = response.json().get("access_token")
+        WX.UPTATE_TIME = TimeService.get_current_time()
+        WX.EXPRIRE_TIME = response.json().get("expires_in")
+        return WX.ACCESS_TOKEN
+    
+    @staticmethod
+    def get_access_token():
+        if WX.ACCESS_TOKEN == "" or TimeService.get_seconds_before(WX.UPTATE_TIME, WX.EXPRIRE_TIME) < 0:
+            return WX.update_access_token()
         return WX.ACCESS_TOKEN
