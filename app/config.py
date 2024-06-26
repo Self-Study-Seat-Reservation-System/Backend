@@ -18,7 +18,16 @@ HOST_PORT = os.getenv("HOST_PORT", default="5000")
 mysqlConfig = "mysql+pymysql://{}:{}@{}/{}?charset=utf8mb4" \
     .format(MYSQL_USER, MYSQL_PASSWORD, MYSQL_HOST, MYSQL_DATABASE)
 
+
+##################
+# WX SETTINGS    #
+##################
+APPID = os.getenv("APPID", default="")
+SECRET = os.getenv("SECRET", default="")
+
 class Config:
     SQLALCHEMY_DATABASE_URI = mysqlConfig
     HOST_IP = HOST_IP
     HOST_PORT = HOST_PORT
+    APPID = APPID
+    SECRET = SECRET
